@@ -1,16 +1,115 @@
-# React + Vite
+# 📊 Employment Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern and responsive **Employment Management System** built using React.js to manage employee tasks, track status, and simulate real-world workflow management.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Overview
 
-## React Compiler
+This project is a frontend-based application designed to manage employees and their assigned tasks efficiently. It demonstrates core frontend concepts like component-based architecture, state management, and dynamic UI updates.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+The application supports task tracking with different statuses such as active, completed, and failed, making it easy to monitor workflow.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## ✨ Features
+
+- 👤 Employee and Admin views  
+- 📋 Task creation and management  
+- 🔄 Task status tracking (Active, Completed, Failed)  
+- 🔍 Dynamic filtering of tasks  
+- 💾 Data persistence using localStorage  
+- ⚡ Real-time UI updates using React state  
+- 🧩 Component-based architecture  
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend:** React.js, JavaScript, HTML, CSS  
+- **State Management:** React Hooks (useState, useEffect)  
+- **Storage:** Browser localStorage  
+- **Version Control:** Git & GitHub  
+
+---
+
+## 🧠 Key Learning Outcomes
+
+- Managing state in a medium-scale React application  
+- Handling prop drilling and component communication  
+- Implementing dynamic UI rendering based on conditions  
+- Structuring reusable and maintainable components  
+- Handling data persistence without a backend  
+
+---
+
+## ⚙️ Installation & Setup
+
+```bash
+# Clone the repository
+git clone https://github.com/Yaduvanshi-Yash/Employment-Management-System-
+
+# Navigate into the project
+cd Employment-Management-System-
+
+# Install dependencies
+npm install
+
+# Start the development server
+npm run dev
+```
+
+---
+
+## 📂 Project Structure
+
+```
+src/
+ ├── components/
+ ├── pages/
+ ├── utils/
+ ├── App.jsx
+ └── main.jsx
+```
+
+---
+
+## ⚠️ Limitations
+
+- No backend integration (data stored in localStorage)  
+- No authentication system  
+- Not deployed yet (currently in development phase)  
+
+---
+
+## 🔮 Future Improvements
+
+- Integrate backend (Node.js + MongoDB)  
+- Add authentication (JWT-based login system)  
+- Role-based access control (Admin/User)  
+- Deploy on cloud (Vercel / Netlify)  
+- Improve UI/UX and performance optimization  
+
+---
+
+## 📸 Screenshots
+
+_Add screenshots here (recommended for better impact)_
+
+---
+
+## 🤝 Contributing
+
+Feel free to fork the repository and contribute to improve the project.
+
+---
+
+## 📬 Contact
+
+- GitHub: https://github.com/Yaduvanshi-Yash  
+
+---
+
+## ⭐ Acknowledgement
+
+This project was built as part of my transition from Mechanical Engineering to Software Development, focusing on building real-world frontend applications.

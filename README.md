@@ -88,15 +88,7 @@ src/
 - Add authentication (JWT-based login system)  
 - Role-based access control (Admin/User)  
 - Deploy on cloud (Vercel / Netlify)  
-- Improve UI/UX and performance optimization  
-
----
-
-## Screenshots
-
-_Add screenshots here (recommended for better impact)_
-
----
+- Improve UI/UX 
 
 ## Contributing
 

@@ -1,10 +1,10 @@
-# 📊 Employment Management System
+# Employment Management System
 
 A modern and responsive **Employment Management System** built using React.js to manage employee tasks, track status, and simulate real-world workflow management.
 
 ---
 
-## 🚀 Overview
+## Overview
 
 This project is a frontend-based application designed to manage employees and their assigned tasks efficiently. It demonstrates core frontend concepts like component-based architecture, state management, and dynamic UI updates.
 
@@ -12,19 +12,19 @@ The application supports task tracking with different statuses such as active, c
 
 ---
 
-## ✨ Features
+## Features
 
-- 👤 Employee and Admin views  
-- 📋 Task creation and management  
-- 🔄 Task status tracking (Active, Completed, Failed)  
-- 🔍 Dynamic filtering of tasks  
-- 💾 Data persistence using localStorage  
-- ⚡ Real-time UI updates using React state  
-- 🧩 Component-based architecture  
+- Employee and Admin views  
+- Task creation and management  
+- Task status tracking (Active, Completed, Failed)  
+- Dynamic filtering of tasks  
+- Data persistence using localStorage  
+- Real-time UI updates using React state  
+- Component-based architecture  
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Frontend:** React.js, JavaScript, HTML, CSS  
 - **State Management:** React Hooks (useState, useEffect)  
@@ -33,7 +33,7 @@ The application supports task tracking with different statuses such as active, c
 
 ---
 
-## 🧠 Key Learning Outcomes
+## Key Learning Outcomes
 
 - Managing state in a medium-scale React application  
 - Handling prop drilling and component communication  
@@ -43,7 +43,7 @@ The application supports task tracking with different statuses such as active, c
 
 ---
 
-## ⚙️ Installation & Setup
+## Installation & Setup
 
 ```bash
 # Clone the repository
@@ -61,7 +61,7 @@ npm run dev
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```
 src/
@@ -74,7 +74,7 @@ src/
 
 ---
 
-## ⚠️ Limitations
+## Limitations
 
 - No backend integration (data stored in localStorage)  
 - No authentication system  
@@ -82,7 +82,7 @@ src/
 
 ---
 
-## 🔮 Future Improvements
+## Future Improvements
 
 - Integrate backend (Node.js + MongoDB)  
 - Add authentication (JWT-based login system)  
@@ -92,24 +92,24 @@ src/
 
 ---
 
-## 📸 Screenshots
+## Screenshots
 
 _Add screenshots here (recommended for better impact)_
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Feel free to fork the repository and contribute to improve the project.
 
 ---
 
-## 📬 Contact
+## Contact
 
 - GitHub: https://github.com/Yaduvanshi-Yash  
 
 ---
 
-## ⭐ Acknowledgement
+## Acknowledgement
 
 This project was built as part of my transition from Mechanical Engineering to Software Development, focusing on building real-world frontend applications.

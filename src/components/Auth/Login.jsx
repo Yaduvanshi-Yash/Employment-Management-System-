@@ -1,15 +1,18 @@
 import React, { useState } from "react";
 
-const Login = ({ handleLogin }) => {
+const Login = ({ handleLogin, loginError, isSubmitting }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
-    handleLogin(email, password, rememberMe);
-    setEmail("");
-    setPassword("");
+    const loggedIn = await handleLogin(email, password, rememberMe);
+
+    if (loggedIn) {
+      setEmail("");
+      setPassword("");
+    }
   };
 
   return (
@@ -60,6 +63,12 @@ const Login = ({ handleLogin }) => {
             </p>
           </div>
 
+          {loginError ? (
+            <p className="mb-5 rounded-2xl border border-rose-400/20 bg-rose-400/10 px-4 py-3 text-sm text-rose-100">
+              {loginError}
+            </p>
+          ) : null}
+
           <div className="space-y-5">
             <div>
               <label className="field-label" htmlFor="email">
@@ -108,9 +117,10 @@ const Login = ({ handleLogin }) => {
 
           <button
             type="submit"
+            disabled={isSubmitting}
             className="btn-primary mt-7 w-full"
           >
-            Enter Dashboard
+            {isSubmitting ? "Signing in..." : "Enter Dashboard"}
           </button>
 
           <p className="mt-5 text-center text-xs leading-5 text-slate-500">

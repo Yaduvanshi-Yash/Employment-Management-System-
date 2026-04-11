@@ -1,8 +1,8 @@
 import { useContext } from "react";
-import { AuthContext } from "../../context/AuthProvider";
+import { AuthContext } from "../../context/AuthContext";
 
 const AllTask = () => {
-  const [authData] = useContext(AuthContext);
+  const { employees, isEmployeesLoading } = useContext(AuthContext);
 
   return (
     <div className="panel-strong mt-8 rounded-[28px] p-6 sm:p-8">
@@ -28,11 +28,14 @@ const AllTask = () => {
           <h2>Completed</h2>
           <h2>Failed</h2>
         </div>
-        {authData.map((elem, index) => {
+        {isEmployeesLoading ? (
+          <div className="px-5 py-6 text-sm text-slate-400">Loading team data...</div>
+        ) : null}
+        {employees.map((elem) => {
           return (
             <div
               className="grid min-w-[720px] grid-cols-5 gap-4 border-b border-white/6 bg-black/10 px-5 py-4 text-sm text-slate-200 last:border-b-0"
-              key={index}
+              key={elem.id}
             >
               <h2 className="font-semibold text-white">{elem.firstName}</h2>
               <h2>{elem.taskNumbers.newTask}</h2>
@@ -42,6 +45,11 @@ const AllTask = () => {
             </div>
           );
         })}
+        {!isEmployeesLoading && !employees.length ? (
+          <div className="px-5 py-6 text-sm text-slate-400">
+            No employee records available yet.
+          </div>
+        ) : null}
       </div>
     </div>
   );

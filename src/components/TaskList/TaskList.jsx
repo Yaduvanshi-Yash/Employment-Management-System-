@@ -2,111 +2,88 @@ import AcceptTask from "./AcceptTask";
 import CompleteTask from "./CompleteTask";
 import FailedTask from "./FailedTask";
 import NewTask from "./NewTask";
-import { AuthContext } from "../../context/AuthProvider";
-import { useContext } from "react";
-import { getStoredSession, setStoredSession } from "../../utils/SessionStorage";
+import { AuthContext } from "../../context/AuthContext";
+import { useContext, useState } from "react";
+import {
+  getStoredSession,
+  getStoredToken,
+  isPersistentSession,
+  setStoredSession,
+} from "../../utils/SessionStorage";
+import { apiRequest } from "../../utils/api";
 
-const TaskList = ({ data }) => {
-  const [authData, setAuthData] = useContext(AuthContext);
+const TaskList = ({ data, onEmployeeUpdate }) => {
+  const { upsertEmployee } = useContext(AuthContext);
+  const [updatingTaskId, setUpdatingTaskId] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  if (!data?.tasks || !authData) {
+  if (!data?.tasks) {
     return null;
   }
 
-  const syncEmployees = (updatedEmployees, employeeEmail) => {
-    setAuthData(updatedEmployees);
-    localStorage.setItem("employees", JSON.stringify(updatedEmployees));
-
+  const syncEmployeeSession = (updatedEmployee) => {
+    upsertEmployee(updatedEmployee);
+    onEmployeeUpdate?.(updatedEmployee);
     const storedSession = getStoredSession();
     const loggedInUser = storedSession ? JSON.parse(storedSession) : null;
-    if (loggedInUser?.role === "employee" && loggedInUser.email === employeeEmail) {
-      const updatedEmployee = updatedEmployees.find(
-        (employee) => employee.email === employeeEmail,
-      );
 
+    if (loggedInUser?.role === "employee" && loggedInUser.email === updatedEmployee.email) {
       setStoredSession(
         {
           ...loggedInUser,
           data: updatedEmployee,
         },
-        Boolean(localStorage.getItem("loggedinUser")),
+        isPersistentSession(),
       );
     }
   };
 
-  const updateTaskStatus = (taskIndex, nextTask) => {
-    const updatedEmployees = authData.map((employee) => {
-      if (employee.email !== data.email) {
-        return employee;
-      }
+  const updateTaskStatus = async (taskId, status) => {
+    const token = getStoredToken();
 
-      const updatedTasks = employee.tasks.map((task, index) =>
-        index === taskIndex ? nextTask : task,
-      );
+    if (!token) {
+      setErrorMessage("Your session expired. Please log in again.");
+      return;
+    }
 
-      const taskNumbers = updatedTasks.reduce(
-        (counts, task) => {
-          if (task.newTask) counts.newTask += 1;
-          if (task.active) counts.active += 1;
-          if (task.complete) counts.complete += 1;
-          if (task.failed) counts.failed += 1;
-          return counts;
+    setUpdatingTaskId(taskId);
+    setErrorMessage("");
+
+    try {
+      const response = await apiRequest(`/tasks/${taskId}/status`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-        { newTask: 0, active: 0, complete: 0, failed: 0 },
-      );
+        body: JSON.stringify({ status }),
+      });
 
-      return {
-        ...employee,
-        tasks: updatedTasks,
-        taskNumbers,
-      };
-    });
-
-    syncEmployees(updatedEmployees, data.email);
+      syncEmployeeSession(response.employee);
+    } catch (error) {
+      setErrorMessage(error.message || "Unable to update the task status.");
+    } finally {
+      setUpdatingTaskId(null);
+    }
   };
 
   const handleAccept = (taskIndex) => {
     const currentTask = data.tasks[taskIndex];
-    updateTaskStatus(taskIndex, {
-      ...currentTask,
-      active: true,
-      newTask: false,
-      complete: false,
-      failed: false,
-    });
+    updateTaskStatus(currentTask.id, "active");
   };
 
   const handleMoveToNew = (taskIndex) => {
     const currentTask = data.tasks[taskIndex];
-    updateTaskStatus(taskIndex, {
-      ...currentTask,
-      active: false,
-      newTask: true,
-      complete: false,
-      failed: false,
-    });
+    updateTaskStatus(currentTask.id, "new");
   };
 
   const handleComplete = (taskIndex) => {
     const currentTask = data.tasks[taskIndex];
-    updateTaskStatus(taskIndex, {
-      ...currentTask,
-      active: false,
-      newTask: false,
-      complete: true,
-      failed: false,
-    });
+    updateTaskStatus(currentTask.id, "complete");
   };
 
   const handleFail = (taskIndex) => {
     const currentTask = data.tasks[taskIndex];
-    updateTaskStatus(taskIndex, {
-      ...currentTask,
-      active: false,
-      newTask: false,
-      complete: false,
-      failed: true,
-    });
+    updateTaskStatus(currentTask.id, "failed");
   };
 
   return (
@@ -124,48 +101,57 @@ const TaskList = ({ data }) => {
           Review the queue and update progress directly from each card.
         </p>
       </div>
+      {errorMessage ? (
+        <p className="mb-5 rounded-2xl border border-rose-400/20 bg-rose-400/10 px-4 py-3 text-sm text-rose-100">
+          {errorMessage}
+        </p>
+      ) : null}
 
       <div
         id="tasklist"
         className="task-board flex min-h-80 gap-5 overflow-x-auto pb-2"
+        aria-label="Employee task list"
       >
         {data.tasks.map((elem, idx) => {
+          const taskKey = elem.id || idx;
+          const isUpdating = updatingTaskId === elem.id;
+
           if (elem.active) {
             return (
               <AcceptTask
-                key={idx}
+                key={taskKey}
                 data={elem}
-                onComplete={() => handleComplete(idx)}
-                onFail={() => handleFail(idx)}
+                onComplete={() => !isUpdating && handleComplete(idx)}
+                onFail={() => !isUpdating && handleFail(idx)}
               />
             );
           }
           if (elem.complete) {
             return (
               <CompleteTask
-                key={idx}
+                key={taskKey}
                 data={elem}
-                onAccept={() => handleAccept(idx)}
+                onAccept={() => !isUpdating && handleAccept(idx)}
               />
             );
           }
           if (elem.failed) {
             return (
               <FailedTask
-                key={idx}
+                key={taskKey}
                 data={elem}
-                onAccept={() => handleAccept(idx)}
-                onReset={() => handleMoveToNew(idx)}
+                onAccept={() => !isUpdating && handleAccept(idx)}
+                onReset={() => !isUpdating && handleMoveToNew(idx)}
               />
             );
           }
           if (elem.newTask) {
             return (
               <NewTask
-                key={idx}
+                key={taskKey}
                 data={elem}
-                onAccept={() => handleAccept(idx)}
-                onFail={() => handleFail(idx)}
+                onAccept={() => !isUpdating && handleAccept(idx)}
+                onFail={() => !isUpdating && handleFail(idx)}
               />
             );
           }

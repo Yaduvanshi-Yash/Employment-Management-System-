@@ -162,6 +162,10 @@ textarea {
   pointer-events: none;
 }
 
+.task-card {
+  width: min(320px, 85vw);
+}
+
 .task-board::-webkit-scrollbar,
 #tasklist::-webkit-scrollbar {
   height: 8px;
@@ -176,6 +180,11 @@ textarea {
 .task-board::-webkit-scrollbar-track,
 #tasklist::-webkit-scrollbar-track {
   background: transparent;
+}
+
+.task-board,
+#tasklist {
+  scrollbar-width: none;
 }
 
 @media (max-width: 768px) {

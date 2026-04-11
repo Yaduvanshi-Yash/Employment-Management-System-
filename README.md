@@ -1,107 +1,130 @@
 # Employment Management System
 
-A modern and responsive **Employment Management System** built using React.js to manage employee tasks, track status, and simulate real-world workflow management.
-
----
+A modern and responsive Employment Management System built with React, Express, and MongoDB for managing employee tasks, tracking progress, and simulating a real-world workflow.
 
 ## Overview
 
-This project is a frontend-based application designed to manage employees and their assigned tasks efficiently. It demonstrates core frontend concepts like component-based architecture, state management, and dynamic UI updates.
+This project started as a frontend dashboard and has now been upgraded into a full-stack application with:
 
-The application supports task tracking with different statuses such as active, completed, and failed, making it easy to monitor workflow.
-
----
+- React + Vite frontend
+- Express backend API
+- MongoDB database integration
+- JWT-based authentication
 
 ## Features
 
-- Employee and Admin views  
-- Task creation and management  
-- Task status tracking (Active, Completed, Failed)  
-- Dynamic filtering of tasks  
-- Data persistence using localStorage  
-- Real-time UI updates using React state  
-- Component-based architecture  
-
----
+- Admin and employee login flow
+- Employee and admin dashboards
+- Task creation and assignment
+- Task status tracking: new, active, complete, failed
+- Backend API with protected routes
+- MongoDB-backed data storage
+- Responsive UI and cleaner dashboard layout
 
 ## Tech Stack
 
-- **Frontend:** React.js, JavaScript, HTML, CSS  
-- **State Management:** React Hooks (useState, useEffect)  
-- **Storage:** Browser localStorage  
-- **Version Control:** Git & GitHub  
+- Frontend: React, Vite, JavaScript, CSS
+- Backend: Node.js, Express
+- Database: MongoDB Atlas, Mongoose
+- Authentication: JWT, bcrypt
+- Deployment: Vercel for frontend, separate backend host, MongoDB Atlas for database
 
----
+## Run the app
 
-## Key Learning Outcomes
-
-- Managing state in a medium-scale React application  
-- Handling prop drilling and component communication  
-- Implementing dynamic UI rendering based on conditions  
-- Structuring reusable and maintainable components  
-- Handling data persistence without a backend  
-
----
-
-## Installation & Setup
+Install dependencies:
 
 ```bash
-# Clone the repository
-git clone https://github.com/Yaduvanshi-Yash/Employment-Management-System-
+npm install --legacy-peer-deps
+```
 
-# Navigate into the project
-cd Employment-Management-System-
+Start the frontend:
 
-# Install dependencies
-npm install
-
-# Start the development server
+```bash
 npm run dev
 ```
 
----
+Start the backend:
+
+```bash
+npm run server
+```
+
+Start the backend in watch mode:
+
+```bash
+npm run dev:server
+```
+
+Seed MongoDB with the current demo data:
+
+```bash
+npm run seed:mongo
+```
+
+## Real authentication
+
+- Login uses `POST /api/auth/login`
+- Protected routes require a signed JWT bearer token
+- Session restore uses `GET /api/auth/me`
+- Set `JWT_SECRET` in your local `.env` for production-style token signing
+
+## Backend environment
+
+Copy values from `.env.example`:
+
+```env
+PORT=5000
+CLIENT_URL=http://localhost:5173,https://your-frontend-domain.vercel.app
+MONGODB_URI=mongodb+srv://username:password@cluster-url/
+MONGODB_DB_NAME=ems
+JWT_SECRET=replace-with-a-long-random-secret
+VITE_API_URL=http://localhost:5000/api
+```
+
+## Demo login
+
+- Admin: `admin@example.com` / `123`
+- Employee: `e@e.com` / `123`
+
+## API endpoints
+
+- `GET /api/health`
+- `POST /api/auth/login`
+- `GET /api/auth/me`
+- `GET /api/employees`
+- `GET /api/employees/:employeeId`
+- `GET /api/employees/:employeeId/tasks`
+- `POST /api/tasks`
+- `PATCH /api/tasks/:taskId/status`
 
 ## Project Structure
 
-```
-src/
- ├── components/
- ├── pages/
- ├── utils/
- ├── App.jsx
- └── main.jsx
+```text
+EMS/
+  src/        frontend app
+  server/     backend API
+  public/     static assets
 ```
 
----
+## Notes
 
-## Limitations
-
-- No backend integration (data stored in localStorage)  
-- No authentication system  
-- Not deployed yet (currently in development phase)  
-
----
+- MongoDB-ready files live in `server/config`, `server/models`, `server/utils`, and `server/docs/database-design.md`
+- The API uses MongoDB-backed auth and task/employee queries when `MONGODB_URI` is present
+- Run `npm run seed:mongo` once to load demo data into MongoDB
+- Deployment order and env setup are documented in `DEPLOYMENT.md`
 
 ## Future Improvements
 
-- Integrate backend (Node.js + MongoDB)  
-- Add authentication (JWT-based login system)  
-- Role-based access control (Admin/User)  
-- Deploy on cloud (Vercel / Netlify)  
-- Improve UI/UX 
+- Add refresh token or secure cookie auth
+- Add validation and better error handling across all forms
+- Add tests for backend routes
+- Add production logging and monitoring
+- Improve role-based route protection in the frontend
 
 ## Contributing
 
-Feel free to fork the repository and contribute to improve the project.
-
----
+Feel free to fork the repository and improve the project.
 
 ## Contact
 
-- GitHub: https://github.com/Yaduvanshi-Yash  
-
----
-
-## Acknowledgement
-
-This project was built as part of my transition from Mechanical Engineering to Software Development, focusing on building real-world frontend applications.
+- GitHub: https://github.com/Yaduvanshi-Yash

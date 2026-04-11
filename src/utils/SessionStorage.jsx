@@ -22,3 +22,19 @@ export const clearStoredSession = () => {
   localStorage.removeItem("loggedinUser");
   sessionStorage.removeItem("loggedinUser");
 };
+
+export const isPersistentSession = () => Boolean(localStorage.getItem("loggedinUser"));
+
+export const getStoredToken = () => {
+  const storedSession = getStoredSession();
+  if (!storedSession) {
+    return null;
+  }
+
+  try {
+    const parsedSession = JSON.parse(storedSession);
+    return parsedSession.token || null;
+  } catch {
+    return null;
+  }
+};

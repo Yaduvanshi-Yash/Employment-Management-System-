@@ -4,13 +4,13 @@ import Header from "../Other/Header";
 
 const AdminDashboard = (props) => {
   return (
-    <div className="app-shell w-full">
+    <main className="app-shell w-full" aria-label="Admin dashboard">
       <div className="mx-auto max-w-7xl">
         <Header changeUser={props.changeUser} />
-      <CreateTask />
+        <CreateTask />
         <AllTask />
       </div>
-    </div>
+    </main>
   );
 };
 

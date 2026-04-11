@@ -1,54 +1,59 @@
 import { useState } from "react";
 import { useContext } from "react";
-import { AuthContext } from "../../context/AuthProvider";
+import { AuthContext } from "../../context/AuthContext";
+import { getStoredToken } from "../../utils/SessionStorage";
+import { apiRequest } from "../../utils/api";
 
 const CreateTask = () => {
-  const [authData, setAuthData] = useContext(AuthContext);
+  const { employees, upsertEmployee } = useContext(AuthContext);
   const [taskTitle, setTaskTitle] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
   const [taskDate, setTaskDate] = useState("");
   const [taskAssignTo, setTaskAssignTo] = useState("");
   const [taskCategory, setTaskCategory] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
+    setErrorMessage("");
+    setSuccessMessage("");
 
-    const createdTask = {
-      taskTitle,
-      taskDescription,
-      taskDate,
-      category: taskCategory,
-      active: false,
-      complete: false,
-      failed: false,
-      newTask: true,
-    };
+    const token = getStoredToken();
+    if (!token) {
+      setErrorMessage("Your session expired. Please log in again.");
+      return;
+    }
 
-    const updatedEmployees = authData.map((elem) => {
-      if (elem.firstName !== taskAssignTo) {
-        return elem;
-      }
-
-      return {
-        ...elem,
-        taskNumbers: {
-          ...elem.taskNumbers,
-          newTask: elem.taskNumbers.newTask + 1,
+    setIsSubmitting(true);
+    try {
+      const response = await apiRequest("/tasks", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-        tasks: [...elem.tasks, createdTask],
-      };
-    });
+        body: JSON.stringify({
+          taskTitle,
+          taskDescription,
+          taskDate,
+          category: taskCategory,
+          employeeId: taskAssignTo,
+        }),
+      });
 
-    setAuthData(updatedEmployees);
-    localStorage.setItem("employees", JSON.stringify(updatedEmployees));
-
-    setTaskDate("");
-    setTaskDescription("");
-    setTaskTitle("");
-    setTaskAssignTo("");
-    setTaskCategory("");
-
-    // Handle form submission logic here
+      upsertEmployee(response.employee);
+      setTaskDate("");
+      setTaskDescription("");
+      setTaskTitle("");
+      setTaskAssignTo("");
+      setTaskCategory("");
+      setSuccessMessage("Task created successfully.");
+    } catch (error) {
+      setErrorMessage(error.message || "Unable to create task.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
   return (
     <div className="panel-strong mt-8 rounded-[28px] p-6 sm:p-8">
@@ -65,7 +70,21 @@ const CreateTask = () => {
         </p>
       </div>
 
-      <form onSubmit={submitHandler} className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
+      {errorMessage ? (
+        <p className="mb-5 rounded-2xl border border-rose-400/20 bg-rose-400/10 px-4 py-3 text-sm text-rose-100">
+          {errorMessage}
+        </p>
+      ) : null}
+      {successMessage ? (
+        <p className="mb-5 rounded-2xl border border-emerald-400/20 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-100">
+          {successMessage}
+        </p>
+      ) : null}
+
+      <form
+        onSubmit={submitHandler}
+        className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]"
+      >
         <div className="grid gap-5 sm:grid-cols-2">
           <div className="sm:col-span-2">
             <label className="field-label" htmlFor="taskTitle">
@@ -100,16 +119,22 @@ const CreateTask = () => {
             <label className="field-label" htmlFor="taskAssignTo">
               Assign to
             </label>
-            <input
+            <select
               id="taskAssignTo"
               value={taskAssignTo}
               onChange={(e) => {
                 setTaskAssignTo(e.target.value);
               }}
               className="field-input"
-              type="text"
-              placeholder="Employee first name"
-            />
+              required
+            >
+              <option value="">Select an employee</option>
+              {employees.map((employee) => (
+                <option key={employee.id} value={employee.id}>
+                  {employee.firstName} ({employee.email})
+                </option>
+              ))}
+            </select>
           </div>
           <div className="sm:col-span-2">
             <label className="field-label" htmlFor="taskCategory">
@@ -141,8 +166,8 @@ const CreateTask = () => {
             className="field-input min-h-52 resize-none"
             placeholder="Add context, deliverables, and expectations for the assignee."
           ></textarea>
-          <button className="btn-primary mt-5 w-full">
-            Create Task
+          <button disabled={isSubmitting} className="btn-primary mt-5 w-full">
+            {isSubmitting ? "Creating..." : "Create Task"}
           </button>
         </div>
       </form>

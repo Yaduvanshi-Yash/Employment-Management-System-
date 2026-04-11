@@ -2,7 +2,7 @@ import React from "react";
 
 const NewTask = ({ data, onAccept, onFail }) => {
   return (
-    <article className="panel-strong flex min-h-80 w-[320px] shrink-0 flex-col rounded-[24px] border-cyan-300/15 bg-gradient-to-br from-emerald-400/14 to-slate-900/85 p-5">
+    <article className="task-card panel-strong flex min-h-80 shrink-0 flex-col rounded-[24px] border-cyan-300/15 bg-gradient-to-br from-emerald-400/14 to-slate-900/85 p-5">
       <div className="flex items-start justify-between gap-3">
         <span className="status-pill bg-cyan-400/16 text-cyan-100">
           {data.category}

@@ -1,26 +1,31 @@
-import { useContext } from "react";
 import Header from "../Other/Header";
 import TaskListNumber from "../Other/TaskListNumber";
 import TaskList from "../TaskList/TaskList";
-import { AuthContext } from "../../context/AuthProvider";
-import { getStoredSession } from "../../utils/SessionStorage";
 
 const EmployeeDashboard = (props) => {
-  const [authData] = useContext(AuthContext);
-  const storedSession = getStoredSession();
-  const loggedInUser = storedSession ? JSON.parse(storedSession) : null;
-  const currentEmployee =
-    authData.find((employee) => employee.email === loggedInUser?.email) ||
-    props.data;
+  const currentEmployee = props.data;
+
+  if (!currentEmployee) {
+    return (
+      <main className="app-shell flex items-center justify-center" aria-label="Employee dashboard">
+        <div className="panel rounded-[24px] px-6 py-5 text-slate-300">
+          Loading your dashboard...
+        </div>
+      </main>
+    );
+  }
 
   return (
-    <div className="app-shell">
+    <main className="app-shell" aria-label="Employee dashboard">
       <div className="mx-auto max-w-7xl">
         <Header changeUser={props.changeUser} data={currentEmployee} />
         <TaskListNumber data={currentEmployee} />
-        <TaskList data={currentEmployee} />
+        <TaskList
+          data={currentEmployee}
+          onEmployeeUpdate={props.onEmployeeUpdate}
+        />
       </div>
-    </div>
+    </main>
   );
 };
 

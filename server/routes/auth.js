@@ -1,11 +1,22 @@
 import { Router } from "express";
 import { createSession, requireAuth } from "../middleware/auth.js";
 import { isMongoEnabled } from "../config/databaseState.js";
+<<<<<<< HEAD
 import { readDb, sanitizeUser } from "../data/store.js";
+=======
+import { validateCompanyCode } from "../config/companyCodes.js";
+import { readDb, sanitizeUser } from "../data/store.js";
+import { sendCredentialsEmail } from "../services/emailService.js";
+>>>>>>> 2e1ece7 (Flatten project structure and finalize full-stack EMS setup)
 import {
   findUserByCredentials,
   getCurrentUserById,
   getEmployeeByEmail,
+<<<<<<< HEAD
+=======
+  checkEmailExists,
+  createUser,
+>>>>>>> 2e1ece7 (Flatten project structure and finalize full-stack EMS setup)
 } from "../services/mongoRepository.js";
 
 const router = Router();
@@ -56,6 +67,81 @@ router.post("/login", async (req, res, next) => {
   }
 });
 
+<<<<<<< HEAD
+=======
+router.post("/register", async (req, res, next) => {
+  try {
+    const { firstName, personalEmail, password, companyCode } = req.body;
+
+    // Validation
+    if (!firstName || !personalEmail || !password || !companyCode) {
+      return res.status(400).json({
+        message: "firstName, personalEmail, password, and companyCode are required.",
+      });
+    }
+
+    if (password.length < 3) {
+      return res.status(400).json({ message: "Password must be at least 3 characters." });
+    }
+
+    if (!personalEmail.includes("@")) {
+      return res.status(400).json({ message: "Invalid email address." });
+    }
+
+    // Determine role from company code
+    let role = null;
+    if (validateCompanyCode(companyCode, "admin")) {
+      role = "admin";
+    } else if (validateCompanyCode(companyCode, "employee")) {
+      role = "employee";
+    } else {
+      return res.status(401).json({ message: "Invalid company code." });
+    }
+
+    // Only works with MongoDB
+    if (!isMongoEnabled()) {
+      return res.status(400).json({
+        message: "Registration requires MongoDB to be connected.",
+      });
+    }
+
+    // Auto-generate work email based on role
+    const emailDomain = role === "admin" ? "admin.com" : "emp.com";
+    const workEmail = `${firstName.toLowerCase()}@${emailDomain}`;
+
+    // Check if work email already exists
+    const emailExists = await checkEmailExists(workEmail);
+    if (emailExists) {
+      return res.status(409).json({
+        message: `Work email ${workEmail} already exists. Please use a different name.`,
+      });
+    }
+
+    // Create user
+    const newUser = await createUser(firstName, workEmail, password, role);
+
+    // Send credentials to personal email
+    const emailSent = await sendCredentialsEmail(personalEmail, workEmail, password, role);
+
+    if (!emailSent) {
+      console.warn(`Failed to send credentials email to ${personalEmail} for user ${workEmail}`);
+    }
+
+    // Create session token
+    const token = createSession(newUser);
+
+    return res.json({
+      message: "Registration successful. Check your email for login credentials.",
+      token,
+      user: newUser,
+      emailSent,
+    });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+>>>>>>> 2e1ece7 (Flatten project structure and finalize full-stack EMS setup)
 router.get("/me", requireAuth, async (req, res, next) => {
   try {
     if (isMongoEnabled()) {

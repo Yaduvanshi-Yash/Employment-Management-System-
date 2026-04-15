@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 export const seedData = {
   admin: [
     {
@@ -272,4 +273,15 @@ export const seedData = {
       ],
     },
   ],
+=======
+// IMPORTANT: Demo credentials have been removed.
+// Users must now register using the /api/auth/register endpoint
+// with a valid company code (4-digit code)
+
+// Company codes are configured in server/config/companyCodes.js
+
+export const seedData = {
+  admin: [],
+  employees: [],
+>>>>>>> 2e1ece7 (Flatten project structure and finalize full-stack EMS setup)
 };

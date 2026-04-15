@@ -168,3 +168,26 @@ export const updateTaskStatus = async ({ taskId, status, requester }) => {
     employee: shapedEmployee,
   };
 };
+<<<<<<< HEAD
+=======
+
+export const checkEmailExists = async (email) => {
+  const user = await User.findOne({ email: email.toLowerCase() });
+  return user !== null;
+};
+
+export const createUser = async (firstName, email, password, role) => {
+  const passwordHash = await bcrypt.hash(password, 10);
+  
+  const user = await User.create({
+    firstName,
+    lastName: "",
+    email: email.toLowerCase(),
+    passwordHash,
+    role,
+    isActive: true,
+  });
+
+  return sanitizeMongoUser(user);
+};
+>>>>>>> 2e1ece7 (Flatten project structure and finalize full-stack EMS setup)

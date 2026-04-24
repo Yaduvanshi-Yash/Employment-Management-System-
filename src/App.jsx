@@ -38,11 +38,8 @@ const App = () => {
   const [isBootstrapping, setIsBootstrapping] = useState(Boolean(getStoredToken()));
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loginError, setLoginError] = useState("");
-<<<<<<< HEAD
-=======
   const [signupError, setSignupError] = useState("");
   const [showSignup, setShowSignup] = useState(false);
->>>>>>> 2e1ece7 (Flatten project structure and finalize full-stack EMS setup)
   const { refreshEmployees, clearEmployees } = useContext(AuthContext);
 
   useEffect(() => {
@@ -133,8 +130,6 @@ const App = () => {
     }
   };
 
-<<<<<<< HEAD
-=======
   const handleSignup = async (firstName, personalEmail, password, companyCode) => {
     setIsSubmitting(true);
     setSignupError("");
@@ -168,8 +163,6 @@ const App = () => {
       setIsSubmitting(false);
     }
   };
-
->>>>>>> 2e1ece7 (Flatten project structure and finalize full-stack EMS setup)
   if (isBootstrapping) {
     return (
       <div className="app-shell flex min-h-screen items-center justify-center text-slate-300">
@@ -181,13 +174,6 @@ const App = () => {
   return (
     <>
       {!session.role ? (
-<<<<<<< HEAD
-        <Login
-          handleLogin={handleLogin}
-          loginError={loginError}
-          isSubmitting={isSubmitting}
-        />
-=======
         <div className="relative">
           {!showSignup ? (
             <>
@@ -229,7 +215,6 @@ const App = () => {
             </>
           )}
         </div>
->>>>>>> 2e1ece7 (Flatten project structure and finalize full-stack EMS setup)
       ) : ""}
 
       {session.role === "admin" ? (

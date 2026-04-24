@@ -248,8 +248,6 @@ export const updateTaskStatus = async ({ taskId, status, requester }) => {
     employee: shapedEmployee,
   };
 };
-<<<<<<< HEAD
-=======
 
 export const reviewTask = async ({ taskId, rating, feedback, reviewer }) => {
   const task = await Task.findById(taskId);
@@ -404,4 +402,3 @@ export const createUser = async (firstName, email, password, role) => {
 
   return sanitizeMongoUser(user);
 };
->>>>>>> 2e1ece7 (Flatten project structure and finalize full-stack EMS setup)

@@ -25,7 +25,7 @@ const createTransporter = () => {
 const getMailSetupHint = () =>
   "Check GMAIL_USER, use a valid Gmail App Password, and make sure Google 2-Step Verification is enabled.";
 
-export const sendCredentialsEmail = async (personalEmail, workEmail, password, role) => {
+export const sendCredentialsEmail = async (personalEmail, workEmail, role) => {
   if (!hasMailConfig()) {
     console.warn("Skipping credentials email because Gmail SMTP is not configured.");
     return false;
@@ -46,16 +46,11 @@ export const sendCredentialsEmail = async (personalEmail, workEmail, password, r
           <p style="color: #666;">Your account has been successfully created as a <strong>${roleLabel}</strong>.</p>
 
           <div style="background-color: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
-            <h3 style="margin-top: 0;">Your Login Credentials</h3>
+            <h3 style="margin-top: 0;">Your EMS Login Details</h3>
 
             <p style="margin: 10px 0;">
               <strong>Email:</strong><br/>
               <code style="background: white; padding: 8px; display: inline-block; border-radius: 4px;">${workEmail}</code>
-            </p>
-
-            <p style="margin: 10px 0;">
-              <strong>Password:</strong><br/>
-              <code style="background: white; padding: 8px; display: inline-block; border-radius: 4px;">${password}</code>
             </p>
 
             <p style="margin: 10px 0;">
@@ -67,7 +62,7 @@ export const sendCredentialsEmail = async (personalEmail, workEmail, password, r
           <div style="background-color: #fff3cd; padding: 15px; border-radius: 8px; border-left: 4px solid #ffc107;">
             <strong>Security Note:</strong>
             <p style="margin: 10px 0; color: #856404;">
-              Please keep your credentials secure. We recommend changing your password after your first login.
+              For security, your password is never emailed. Use the password you created during signup.
             </p>
           </div>
 

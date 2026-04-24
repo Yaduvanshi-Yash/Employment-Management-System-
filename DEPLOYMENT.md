@@ -34,7 +34,17 @@ CLIENT_URL=https://your-frontend-domain.vercel.app
 MONGODB_URI=mongodb+srv://username:password@cluster-url/
 MONGODB_DB_NAME=EMS
 JWT_SECRET=replace-with-a-long-random-secret
+ADMIN_COMPANY_CODES=1234,5678,9012
+EMPLOYEE_COMPANY_CODES=3456,7890,2345
+GMAIL_USER=your-gmail@gmail.com
+GMAIL_APP_PASSWORD=your-app-password-16-chars
 ```
+
+Notes:
+
+- `CLIENT_URL` can contain multiple comma-separated origins if needed
+- Email is optional; if `GMAIL_USER` and `GMAIL_APP_PASSWORD` are omitted, signup still works but credentials email is skipped
+- Rotate any MongoDB, JWT, or Gmail secrets before production if they were ever shared locally
 
 Backend build/start:
 
@@ -77,5 +87,7 @@ npm run build
 - Frontend login works with deployed backend
 - Admin can create tasks
 - Employee can update task status
+- Admin can review completed employee tasks
+- New signup works and receives work email if Gmail SMTP is configured
 - Backend CORS includes the deployed frontend URL
 - Atlas allows the backend host to connect

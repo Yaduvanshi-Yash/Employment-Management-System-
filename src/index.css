@@ -2,18 +2,18 @@
 
 :root {
   color-scheme: dark;
-  --bg-primary: #06110f;
-  --bg-secondary: #0b1a17;
-  --bg-surface: rgba(10, 21, 19, 0.82);
-  --bg-surface-strong: rgba(13, 27, 24, 0.96);
-  --border-soft: rgba(99, 255, 203, 0.12);
-  --border-strong: rgba(110, 255, 206, 0.22);
-  --text-primary: #f4fff9;
-  --text-secondary: #9fb8b0;
-  --accent: #3dd6a0;
-  --accent-strong: #1fb784;
-  --danger: #ff6b77;
-  --warning: #f2c86f;
+  --bg-primary: #050b1a;
+  --bg-secondary: #0d1630;
+  --bg-surface: rgba(10, 20, 42, 0.8);
+  --bg-surface-strong: rgba(12, 25, 52, 0.94);
+  --border-soft: rgba(114, 162, 255, 0.14);
+  --border-strong: rgba(125, 174, 255, 0.24);
+  --text-primary: #eff5ff;
+  --text-secondary: #9aabc9;
+  --accent: #62a5ff;
+  --accent-strong: #3f7dff;
+  --danger: #ff6b88;
+  --warning: #f5c46b;
 }
 
 * {
@@ -22,9 +22,9 @@
 
 html {
   background:
-    radial-gradient(circle at top left, rgba(61, 214, 160, 0.18), transparent 30%),
-    radial-gradient(circle at top right, rgba(34, 197, 94, 0.08), transparent 24%),
-    linear-gradient(135deg, var(--bg-primary), #020605 60%, #071312);
+    radial-gradient(circle at top left, rgba(98, 165, 255, 0.24), transparent 28%),
+    radial-gradient(circle at top right, rgba(75, 133, 255, 0.16), transparent 24%),
+    linear-gradient(135deg, var(--bg-primary), #081225 58%, #111c3c);
 }
 
 body {
@@ -76,8 +76,8 @@ textarea {
 
 .field-input {
   width: 100%;
-  border: 1px solid rgba(127, 161, 150, 0.18);
-  background: rgba(6, 14, 13, 0.72);
+  border: 1px solid rgba(126, 151, 201, 0.24);
+  background: rgba(7, 15, 32, 0.78);
   color: var(--text-primary);
   border-radius: 16px;
   padding: 0.95rem 1rem;
@@ -86,12 +86,12 @@ textarea {
 }
 
 .field-input::placeholder {
-  color: rgba(159, 184, 176, 0.66);
+  color: rgba(154, 171, 201, 0.68);
 }
 
 .field-input:focus {
-  border-color: rgba(61, 214, 160, 0.55);
-  box-shadow: 0 0 0 4px rgba(61, 214, 160, 0.14);
+  border-color: rgba(98, 165, 255, 0.58);
+  box-shadow: 0 0 0 4px rgba(98, 165, 255, 0.16);
 }
 
 .btn-primary,
@@ -117,14 +117,14 @@ textarea {
 
 .btn-primary {
   background: linear-gradient(135deg, var(--accent), var(--accent-strong));
-  color: #03271d;
-  box-shadow: 0 12px 30px rgba(61, 214, 160, 0.24);
+  color: #eff5ff;
+  box-shadow: 0 12px 30px rgba(63, 125, 255, 0.26);
 }
 
 .btn-secondary {
-  border-color: rgba(242, 200, 111, 0.22);
-  background: rgba(242, 200, 111, 0.12);
-  color: #ffe7a1;
+  border-color: rgba(136, 172, 255, 0.24);
+  background: rgba(98, 165, 255, 0.12);
+  color: #dce9ff;
 }
 
 .btn-danger {
@@ -134,9 +134,9 @@ textarea {
 }
 
 .btn-success {
-  border-color: rgba(61, 214, 160, 0.18);
-  background: rgba(61, 214, 160, 0.14);
-  color: #b6ffdf;
+  border-color: rgba(98, 165, 255, 0.2);
+  background: rgba(98, 165, 255, 0.14);
+  color: #dbe8ff;
 }
 
 .status-pill {
@@ -173,7 +173,7 @@ textarea {
 
 .task-board::-webkit-scrollbar-thumb,
 #tasklist::-webkit-scrollbar-thumb {
-  background: rgba(61, 214, 160, 0.2);
+  background: rgba(98, 165, 255, 0.24);
   border-radius: 999px;
 }
 

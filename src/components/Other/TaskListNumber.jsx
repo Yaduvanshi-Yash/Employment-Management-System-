@@ -3,31 +3,43 @@ const TaskListNumber = ({ data }) => {
     {
       label: "New Tasks",
       value: data?.taskNumbers?.newTask ?? 0,
-      accent: "from-cyan-400/25 to-transparent",
-      tone: "text-cyan-200",
+      accent: "from-sky-400/25 to-transparent",
+      tone: "text-sky-200",
+    },
+    {
+      label: "Active Tasks",
+      value: data?.taskNumbers?.active ?? 0,
+      accent: "from-indigo-400/25 to-transparent",
+      tone: "text-indigo-200",
     },
     {
       label: "Completed",
-      value: data?.taskNumbers?.complete ?? 0,
-      accent: "from-emerald-400/25 to-transparent",
-      tone: "text-emerald-200",
-    },
-    {
-      label: "Accepted",
-      value: data?.taskNumbers?.active ?? 0,
+      value: data?.performance?.completedCount ?? data?.taskNumbers?.complete ?? 0,
       accent: "from-blue-400/25 to-transparent",
       tone: "text-blue-200",
     },
     {
-      label: "Failed",
-      value: data?.taskNumbers?.failed ?? 0,
+      label: "Overdue",
+      value: data?.performance?.overdueCount ?? 0,
+      accent: "from-rose-400/25 to-transparent",
+      tone: "text-rose-200",
+    },
+    {
+      label: "Avg Rating",
+      value: data?.performance?.averageRating?.toFixed?.(1) ?? data?.performance?.averageRating ?? "0.0",
       accent: "from-amber-300/25 to-transparent",
       tone: "text-amber-100",
+    },
+    {
+      label: "Growth Score",
+      value: data?.insights?.growthScore ?? 0,
+      accent: "from-emerald-400/25 to-transparent",
+      tone: "text-emerald-100",
     },
   ];
 
   return (
-    <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+    <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-6">
       {metrics.map((metric) => (
         <div
           key={metric.label}

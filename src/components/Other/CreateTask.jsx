@@ -1,19 +1,82 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { getStoredToken } from "../../utils/SessionStorage";
 import { apiRequest } from "../../utils/api";
 
-const CreateTask = () => {
+const suggestPriority = ({ taskTitle, taskDescription, taskDate, taskCategory }) => {
+  const content = `${taskTitle} ${taskDescription} ${taskCategory}`.toLowerCase();
+  const urgentKeywords = ["client", "security", "payroll", "outage", "production", "launch"];
+  const highKeywords = ["audit", "compliance", "review", "report", "interview", "escalation"];
+  let score = 2;
+
+  if (taskDate) {
+    const dueDate = new Date(taskDate);
+    const today = new Date();
+    dueDate.setHours(23, 59, 59, 999);
+    today.setHours(0, 0, 0, 0);
+    const daysUntilDue = Math.ceil((dueDate.getTime() - today.getTime()) / 86400000);
+
+    if (daysUntilDue <= 1) {
+      score += 2;
+    } else if (daysUntilDue <= 3) {
+      score += 1;
+    }
+  }
+
+  if (urgentKeywords.some((keyword) => content.includes(keyword))) {
+    score += 2;
+  } else if (highKeywords.some((keyword) => content.includes(keyword))) {
+    score += 1;
+  }
+
+  if (content.includes("bug") || content.includes("fix")) {
+    score += 1;
+  }
+
+  if (score >= 5) {
+    return {
+      priority: "urgent",
+      reason: "This looks client-facing, production-critical, or due immediately.",
+    };
+  }
+
+  if (score >= 4) {
+    return {
+      priority: "high",
+      reason: "This looks important and time-sensitive for delivery.",
+    };
+  }
+
+  if (score >= 2) {
+    return {
+      priority: "medium",
+      reason: "This looks like normal planned execution work.",
+    };
+  }
+
+  return {
+    priority: "low",
+    reason: "This looks flexible and low urgency.",
+  };
+};
+
+const CreateTask = ({ onTaskCreated }) => {
   const { employees, upsertEmployee } = useContext(AuthContext);
   const [taskTitle, setTaskTitle] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
   const [taskDate, setTaskDate] = useState("");
   const [taskAssignTo, setTaskAssignTo] = useState("");
   const [taskCategory, setTaskCategory] = useState("");
+  const [taskPriority, setTaskPriority] = useState("medium");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const recommendation = useMemo(
+    () => suggestPriority({ taskTitle, taskDescription, taskDate, taskCategory }),
+    [taskCategory, taskDate, taskDescription, taskTitle],
+  );
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -38,6 +101,7 @@ const CreateTask = () => {
           taskDescription,
           taskDate,
           category: taskCategory,
+          priority: taskPriority,
           employeeId: taskAssignTo,
         }),
       });
@@ -48,17 +112,20 @@ const CreateTask = () => {
       setTaskTitle("");
       setTaskAssignTo("");
       setTaskCategory("");
+      setTaskPriority("medium");
       setSuccessMessage("Task created successfully.");
+      onTaskCreated?.();
     } catch (error) {
       setErrorMessage(error.message || "Unable to create task.");
     } finally {
       setIsSubmitting(false);
     }
   };
+
   return (
     <div className="panel-strong mt-8 rounded-[28px] p-6 sm:p-8">
       <div className="mb-8">
-        <p className="text-sm uppercase tracking-[0.24em] text-emerald-300/80">
+        <p className="text-sm uppercase tracking-[0.24em] text-blue-300/80">
           Admin workspace
         </p>
         <h2 className="mt-3 text-2xl font-semibold text-white sm:text-3xl">
@@ -76,7 +143,7 @@ const CreateTask = () => {
         </p>
       ) : null}
       {successMessage ? (
-        <p className="mb-5 rounded-2xl border border-emerald-400/20 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-100">
+        <p className="mb-5 rounded-2xl border border-blue-400/20 bg-blue-400/10 px-4 py-3 text-sm text-blue-100">
           {successMessage}
         </p>
       ) : null}
@@ -150,6 +217,44 @@ const CreateTask = () => {
               type="text"
               placeholder="Operations, reporting, design, follow-up"
             />
+          </div>
+          <div className="sm:col-span-2 rounded-[22px] border border-blue-400/20 bg-blue-400/8 p-4">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p className="text-xs uppercase tracking-[0.18em] text-blue-200/80">
+                  Smart priority suggestion
+                </p>
+                <p className="mt-2 text-lg font-semibold text-white">
+                  Recommended: {recommendation.priority}
+                </p>
+                <p className="mt-1 text-sm text-slate-300">{recommendation.reason}</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setTaskPriority(recommendation.priority)}
+                className="btn-secondary whitespace-nowrap"
+              >
+                Apply suggestion
+              </button>
+            </div>
+          </div>
+          <div className="sm:col-span-2">
+            <label className="field-label" htmlFor="taskPriority">
+              Priority
+            </label>
+            <select
+              id="taskPriority"
+              value={taskPriority}
+              onChange={(e) => {
+                setTaskPriority(e.target.value);
+              }}
+              className="field-input"
+            >
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+              <option value="urgent">Urgent</option>
+            </select>
           </div>
         </div>
 

@@ -1,25 +1,44 @@
 import { Router } from "express";
 import { createSession, requireAuth } from "../middleware/auth.js";
 import { isMongoEnabled } from "../config/databaseState.js";
-<<<<<<< HEAD
-import { readDb, sanitizeUser } from "../data/store.js";
-=======
 import { validateCompanyCode } from "../config/companyCodes.js";
-import { readDb, sanitizeUser } from "../data/store.js";
-import { sendCredentialsEmail } from "../services/emailService.js";
->>>>>>> 2e1ece7 (Flatten project structure and finalize full-stack EMS setup)
 import {
+  checkLocalEmailExists,
+  createLocalUser,
+  findLocalUserByCredentials,
+  readDb,
+  sanitizeUser,
+} from "../data/store.js";
+import { sendCredentialsEmail } from "../services/emailService.js";
+import {
+  buildUniqueWorkEmail,
+  checkEmailExists,
+  createUser,
   findUserByCredentials,
   getCurrentUserById,
   getEmployeeByEmail,
-<<<<<<< HEAD
-=======
-  checkEmailExists,
-  createUser,
->>>>>>> 2e1ece7 (Flatten project structure and finalize full-stack EMS setup)
 } from "../services/mongoRepository.js";
 
 const router = Router();
+
+const MIN_PASSWORD_LENGTH = 8;
+
+const buildLocalUniqueWorkEmail = async (firstName, role) => {
+  const emailDomain = role === "admin" ? "admin.com" : "emp.com";
+  const baseName = firstName.trim().toLowerCase().replace(/[^a-z0-9]+/g, ".").replace(/^\.+|\.+$/g, "") || "user";
+  let suffix = 0;
+
+  while (true) {
+    const candidateEmail =
+      suffix === 0 ? `${baseName}@${emailDomain}` : `${baseName}${suffix}@${emailDomain}`;
+
+    if (!(await checkLocalEmailExists(candidateEmail))) {
+      return candidateEmail;
+    }
+
+    suffix += 1;
+  }
+};
 
 router.post("/login", async (req, res, next) => {
   try {
@@ -34,16 +53,7 @@ router.post("/login", async (req, res, next) => {
     if (isMongoEnabled()) {
       user = await findUserByCredentials(email, password);
     } else {
-      const db = await readDb();
-      const admin = db.admin.find(
-        (candidate) => candidate.email === email && candidate.password === password,
-      );
-
-      const employee = db.employees.find(
-        (candidate) => candidate.email === email && candidate.password === password,
-      );
-
-      user = admin || employee;
+      user = await findLocalUserByCredentials(email, password);
     }
 
     if (!user) {
@@ -52,8 +62,10 @@ router.post("/login", async (req, res, next) => {
 
     const token = createSession(user);
     const employee =
-      isMongoEnabled() && user.role === "employee"
-        ? await getEmployeeByEmail(user.email)
+      user.role === "employee"
+        ? isMongoEnabled()
+          ? await getEmployeeByEmail(user.email)
+          : sanitizeUser(user)
         : null;
 
     return res.json({
@@ -67,8 +79,6 @@ router.post("/login", async (req, res, next) => {
   }
 });
 
-<<<<<<< HEAD
-=======
 router.post("/register", async (req, res, next) => {
   try {
     const { firstName, personalEmail, password, companyCode } = req.body;
@@ -80,8 +90,10 @@ router.post("/register", async (req, res, next) => {
       });
     }
 
-    if (password.length < 3) {
-      return res.status(400).json({ message: "Password must be at least 3 characters." });
+    if (password.length < MIN_PASSWORD_LENGTH) {
+      return res.status(400).json({
+        message: `Password must be at least ${MIN_PASSWORD_LENGTH} characters.`,
+      });
     }
 
     if (!personalEmail.includes("@")) {
@@ -98,42 +110,33 @@ router.post("/register", async (req, res, next) => {
       return res.status(401).json({ message: "Invalid company code." });
     }
 
-    // Only works with MongoDB
-    if (!isMongoEnabled()) {
-      return res.status(400).json({
-        message: "Registration requires MongoDB to be connected.",
-      });
-    }
+    const workEmail = isMongoEnabled()
+      ? await buildUniqueWorkEmail(firstName, role, checkEmailExists)
+      : await buildLocalUniqueWorkEmail(firstName, role);
 
-    // Auto-generate work email based on role
-    const emailDomain = role === "admin" ? "admin.com" : "emp.com";
-    const workEmail = `${firstName.toLowerCase()}@${emailDomain}`;
+    const newUser = isMongoEnabled()
+      ? await createUser(firstName, workEmail, password, role)
+      : await createLocalUser({ firstName, email: workEmail, password, role });
 
-    // Check if work email already exists
-    const emailExists = await checkEmailExists(workEmail);
-    if (emailExists) {
-      return res.status(409).json({
-        message: `Work email ${workEmail} already exists. Please use a different name.`,
-      });
-    }
-
-    // Create user
-    const newUser = await createUser(firstName, workEmail, password, role);
-
-    // Send credentials to personal email
-    const emailSent = await sendCredentialsEmail(personalEmail, workEmail, password, role);
+    const emailSent = await sendCredentialsEmail(personalEmail, workEmail, role);
 
     if (!emailSent) {
       console.warn(`Failed to send credentials email to ${personalEmail} for user ${workEmail}`);
     }
 
-    // Create session token
     const token = createSession(newUser);
+    const employee =
+      role === "employee"
+        ? isMongoEnabled()
+          ? await getEmployeeByEmail(workEmail)
+          : sanitizeUser(newUser)
+        : null;
 
     return res.json({
-      message: "Registration successful. Check your email for login credentials.",
+      message: "Registration successful. Use your chosen password and your new work email to sign in.",
       token,
       user: newUser,
+      employee,
       emailSent,
     });
   } catch (error) {
@@ -141,7 +144,6 @@ router.post("/register", async (req, res, next) => {
   }
 });
 
->>>>>>> 2e1ece7 (Flatten project structure and finalize full-stack EMS setup)
 router.get("/me", requireAuth, async (req, res, next) => {
   try {
     if (isMongoEnabled()) {

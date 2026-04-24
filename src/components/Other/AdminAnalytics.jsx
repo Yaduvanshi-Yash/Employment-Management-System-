@@ -1,0 +1,388 @@
+const statusConfig = {
+  new: { label: "New", tone: "bg-sky-400", color: "#38bdf8" },
+  active: { label: "Active", tone: "bg-indigo-400", color: "#818cf8" },
+  complete: { label: "Complete", tone: "bg-blue-400", color: "#60a5fa" },
+  failed: { label: "Failed", tone: "bg-rose-400", color: "#fb7185" },
+};
+
+const priorityConfig = {
+  low: { label: "Low", tone: "bg-slate-400" },
+  medium: { label: "Medium", tone: "bg-blue-400" },
+  high: { label: "High", tone: "bg-amber-400" },
+  urgent: { label: "Urgent", tone: "bg-rose-400" },
+};
+
+const riskTone = {
+  low: "bg-emerald-400/14 text-emerald-100 border-emerald-300/20",
+  medium: "bg-amber-400/14 text-amber-100 border-amber-300/20",
+  high: "bg-rose-400/14 text-rose-100 border-rose-300/20",
+};
+
+const MetricCard = ({ label, value, helper }) => (
+  <div className="panel rounded-[24px] p-5">
+    <p className="text-sm uppercase tracking-[0.2em] text-slate-400">{label}</p>
+    <div className="mt-6 flex items-end justify-between gap-3">
+      <p className="text-4xl font-semibold text-white">{value}</p>
+      <p className="text-sm text-slate-400">{helper}</p>
+    </div>
+  </div>
+);
+
+const DistributionBlock = ({ title, items, config }) => {
+  const maxValue = Math.max(...items.map((item) => item.value), 1);
+
+  return (
+    <div className="panel rounded-[24px] p-5">
+      <div className="mb-5">
+        <p className="text-lg font-semibold text-white">{title}</p>
+      </div>
+      <div className="space-y-4">
+        {items.map((item) => (
+          <div key={item.key}>
+            <div className="mb-2 flex items-center justify-between text-sm">
+              <span className="text-slate-300">{config[item.key].label}</span>
+              <span className="text-slate-400">{item.value}</span>
+            </div>
+            <div className="h-2 rounded-full bg-white/6">
+              <div
+                className={`h-2 rounded-full ${config[item.key].tone}`}
+                style={{
+                  width: `${Math.max((item.value / maxValue) * 100, item.value ? 10 : 0)}%`,
+                }}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const DonutChart = ({ items }) => {
+  const total = items.reduce((sum, item) => sum + item.value, 0);
+  const segments = items
+    .filter((item) => item.value > 0)
+    .reduce(
+      (accumulator, item) => {
+        const dash = total ? (item.value / total) * 100 : 0;
+        const segment = (
+          <circle
+            key={item.key}
+            cx="50"
+            cy="50"
+            r="36"
+            fill="none"
+            stroke={statusConfig[item.key].color}
+            strokeDasharray={`${dash} ${100 - dash}`}
+            strokeDashoffset={accumulator.offset}
+            strokeLinecap="round"
+            strokeWidth="10"
+          />
+        );
+
+        return {
+          offset: accumulator.offset - dash,
+          nodes: [...accumulator.nodes, segment],
+        };
+      },
+      { offset: 25, nodes: [] },
+    ).nodes;
+
+  return (
+    <div className="panel rounded-[24px] p-5">
+      <div className="flex items-center justify-between gap-5">
+        <div>
+          <p className="text-lg font-semibold text-white">Task health chart</p>
+          <p className="mt-2 text-sm text-slate-400">
+            Visual split of current team workload.
+          </p>
+        </div>
+        <div className="relative h-36 w-36 shrink-0">
+          <svg viewBox="0 0 100 100" className="h-full w-full -rotate-90">
+            <circle
+              cx="50"
+              cy="50"
+              r="36"
+              fill="none"
+              stroke="rgba(255,255,255,0.08)"
+              strokeWidth="10"
+            />
+            {segments}
+          </svg>
+          <div className="absolute inset-0 flex flex-col items-center justify-center">
+            <span className="text-3xl font-semibold text-white">{total}</span>
+            <span className="text-xs uppercase tracking-[0.18em] text-slate-500">
+              Tasks
+            </span>
+          </div>
+        </div>
+      </div>
+      <div className="mt-5 grid grid-cols-2 gap-3">
+        {items.map((item) => (
+          <div key={item.key} className="flex items-center gap-2 text-sm text-slate-300">
+            <span
+              className="h-2.5 w-2.5 rounded-full"
+              style={{ backgroundColor: statusConfig[item.key].color }}
+            />
+            {statusConfig[item.key].label}: {item.value}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const ProductivityTrend = ({ trend = [] }) => {
+  const maxValue = Math.max(...trend.map((item) => item.completed), 1);
+
+  return (
+    <div className="panel rounded-[24px] p-5">
+      <div className="mb-5">
+        <p className="text-lg font-semibold text-white">7-day productivity</p>
+        <p className="mt-2 text-sm text-slate-400">
+          Completed task trend for quick reporting.
+        </p>
+      </div>
+      <div className="flex h-44 items-end gap-3">
+        {trend.length ? (
+          trend.map((item) => (
+            <div key={item.label} className="flex flex-1 flex-col items-center gap-2">
+              <div className="flex h-32 w-full items-end rounded-full bg-white/6 p-1">
+                <div
+                  className="w-full rounded-full bg-gradient-to-t from-blue-500 to-sky-300"
+                  style={{
+                    height: `${Math.max((item.completed / maxValue) * 100, item.completed ? 10 : 3)}%`,
+                  }}
+                  title={`${item.completed} completed`}
+                />
+              </div>
+              <span className="text-xs text-slate-500">{item.label}</span>
+            </div>
+          ))
+        ) : (
+          <div className="flex h-full w-full items-center justify-center rounded-[20px] border border-dashed border-white/10 text-sm text-slate-400">
+            Complete tasks to build a productivity chart.
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const AdminAnalytics = ({ analytics, isLoading }) => {
+  if (isLoading) {
+    return (
+      <section className="panel-strong mt-8 rounded-[28px] p-6 sm:p-8">
+        <div className="text-sm text-slate-400">Loading admin analytics...</div>
+      </section>
+    );
+  }
+
+  const performance = analytics?.performance || {
+    completedCount: 0,
+    overdueCount: 0,
+    reviewedCount: 0,
+    averageRating: 0,
+    onTimeRate: 0,
+  };
+
+  const statusItems = Object.entries(analytics?.statusCounts || statusConfig).map(([key, value]) => ({
+    key,
+    value: typeof value === "number" ? value : 0,
+  }));
+
+  const priorityItems = Object.entries(analytics?.priorityCounts || priorityConfig).map(
+    ([key, value]) => ({
+      key,
+      value: typeof value === "number" ? value : 0,
+    }),
+  );
+
+  const topPerformer = analytics?.employeePerformance?.[0];
+  const reviewedCount = performance.reviewedCount || 0;
+  const ratingCoverage = performance.completedCount
+    ? Math.round((reviewedCount / performance.completedCount) * 100)
+    : 0;
+  const highRiskEmployees = (analytics?.employeePerformance || []).filter(
+    (employee) => employee.riskLevel === "high",
+  );
+
+  return (
+    <section className="panel-strong mt-8 rounded-[28px] p-6 sm:p-8">
+      <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="text-sm uppercase tracking-[0.24em] text-blue-300/80">
+            Analytics overview
+          </p>
+          <h2 className="mt-2 text-2xl font-semibold text-white">
+            Workforce insights
+          </h2>
+        </div>
+        <p className="max-w-2xl text-sm text-slate-400">
+          Track team throughput, completion quality, overdue risk, growth score, and badge-driven performance at a glance.
+        </p>
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <MetricCard
+          label="Completed Tasks"
+          value={performance.completedCount}
+          helper="Reviewed output"
+        />
+        <MetricCard
+          label="On-Time Rate"
+          value={`${performance.onTimeRate}%`}
+          helper="Deadline discipline"
+        />
+        <MetricCard
+          label="Average Rating"
+          value={`${performance.averageRating || "0.0"}/5`}
+          helper="Quality score"
+        />
+        <MetricCard
+          label="High Risk Team"
+          value={highRiskEmployees.length}
+          helper="Burnout watch"
+        />
+      </div>
+
+      <div className="mt-6 grid gap-4 xl:grid-cols-[0.95fr_0.95fr_1.1fr]">
+        <DonutChart items={statusItems} />
+        <DistributionBlock
+          title="Priority distribution"
+          items={priorityItems}
+          config={priorityConfig}
+        />
+        <div className="panel rounded-[24px] p-5">
+          <p className="text-lg font-semibold text-white">Top performer</p>
+          {topPerformer ? (
+            <div className="mt-6 rounded-[20px] border border-blue-400/20 bg-blue-400/8 p-5">
+              <p className="text-xl font-semibold text-white">{topPerformer.employeeName}</p>
+              <div className="mt-5 grid gap-3 sm:grid-cols-4">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.18em] text-slate-500">
+                    Growth
+                  </p>
+                  <p className="mt-2 text-2xl font-semibold text-white">
+                    {topPerformer.growthScore}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-[0.18em] text-slate-500">
+                    Completed
+                  </p>
+                  <p className="mt-2 text-2xl font-semibold text-white">
+                    {topPerformer.completedCount}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-[0.18em] text-slate-500">
+                    Avg rating
+                  </p>
+                  <p className="mt-2 text-2xl font-semibold text-white">
+                    {topPerformer.averageRating || "0.0"}/5
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-[0.18em] text-slate-500">
+                    On-time
+                  </p>
+                  <p className="mt-2 text-2xl font-semibold text-white">
+                    {topPerformer.onTimeRate}%
+                  </p>
+                </div>
+              </div>
+              {topPerformer.badges?.length ? (
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {topPerformer.badges.map((badge) => (
+                    <span
+                      key={badge.key}
+                      className="rounded-full border border-blue-300/20 bg-blue-400/14 px-3 py-1 text-xs font-semibold text-blue-100"
+                    >
+                      {badge.label}
+                    </span>
+                  ))}
+                </div>
+              ) : null}
+            </div>
+          ) : (
+            <div className="mt-6 rounded-[20px] border border-dashed border-white/10 px-5 py-6 text-sm text-slate-400">
+              Top performer insights will appear after tasks are completed and reviewed.
+            </div>
+          )}
+
+          <div className="mt-6">
+            <p className="text-sm uppercase tracking-[0.18em] text-slate-500">
+              Team leaderboard
+            </p>
+            <div className="mt-4 space-y-3">
+              {(analytics?.employeePerformance || []).slice(0, 4).map((employee, index) => (
+                <div
+                  key={employee.employeeId}
+                  className="rounded-[18px] border border-white/8 bg-white/4 px-4 py-3"
+                >
+                  <div className="flex items-center justify-between gap-3">
+                    <div>
+                      <p className="text-sm font-semibold text-white">
+                        #{index + 1} {employee.employeeName}
+                      </p>
+                      <p className="text-xs text-slate-400">
+                        Growth {employee.growthScore} | {employee.completedCount} completed
+                      </p>
+                    </div>
+                    <div
+                      className={`rounded-full border px-3 py-1 text-xs font-semibold ${riskTone[employee.riskLevel] || riskTone.low}`}
+                    >
+                      {employee.riskLabel}
+                    </div>
+                  </div>
+                  {employee.badges?.length ? (
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {employee.badges.slice(0, 2).map((badge) => (
+                        <span
+                          key={badge.key}
+                          className="rounded-full border border-white/10 bg-white/6 px-3 py-1 text-[11px] font-semibold text-slate-200"
+                        >
+                          {badge.label}
+                        </span>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-6 grid gap-4 xl:grid-cols-[1.1fr_0.9fr]">
+        <ProductivityTrend trend={analytics?.completionTrend || []} />
+        <div className="panel rounded-[24px] p-5">
+          <p className="text-lg font-semibold text-white">Interview-ready highlights</p>
+          <p className="mt-2 text-sm leading-6 text-slate-400">
+            This EMS now showcases unique product thinking: employee growth score,
+            burnout risk detection, achievement badges, smart prioritization, and a calendar-first task view.
+          </p>
+          <div className="mt-5 grid gap-3 sm:grid-cols-2">
+            <div className="rounded-[18px] border border-white/8 bg-white/4 p-4">
+              <p className="text-xs uppercase tracking-[0.18em] text-slate-500">
+                Rating coverage
+              </p>
+              <p className="mt-2 text-2xl font-semibold text-white">{ratingCoverage}%</p>
+            </div>
+            <div className="rounded-[18px] border border-white/8 bg-white/4 p-4">
+              <p className="text-xs uppercase tracking-[0.18em] text-slate-500">
+                Team members
+              </p>
+              <p className="mt-2 text-2xl font-semibold text-white">
+                {analytics?.employeePerformance?.length || 0}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default AdminAnalytics;

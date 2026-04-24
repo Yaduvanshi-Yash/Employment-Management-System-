@@ -1,9 +1,31 @@
+import ActivityTimeline from "../Other/ActivityTimeline";
+import EmployeeInsights from "../Other/EmployeeInsights";
 import Header from "../Other/Header";
 import TaskListNumber from "../Other/TaskListNumber";
 import TaskList from "../TaskList/TaskList";
+import { useState } from "react";
+
+const employeeSections = [
+  {
+    id: "overview",
+    label: "Overview",
+    description: "Check your task numbers, growth score, and personal workload insights.",
+  },
+  {
+    id: "board",
+    label: "Task Board",
+    description: "Work through assigned tasks without the rest of the dashboard getting in the way.",
+  },
+  {
+    id: "activity",
+    label: "Activity",
+    description: "Review your latest status changes, completions, and feedback moments.",
+  },
+];
 
 const EmployeeDashboard = (props) => {
   const currentEmployee = props.data;
+  const [activeSection, setActiveSection] = useState("overview");
 
   if (!currentEmployee) {
     return (
@@ -15,15 +37,54 @@ const EmployeeDashboard = (props) => {
     );
   }
 
+  const recentActivity = (currentEmployee.tasks || [])
+    .flatMap((task) =>
+      (task.activityLog || []).map((event) => ({
+        ...event,
+        taskTitle: task.taskTitle,
+        employeeName: currentEmployee.firstName,
+      })),
+    )
+    .sort((left, right) => new Date(right.createdAt) - new Date(left.createdAt))
+    .slice(0, 8);
+
+  const activeSectionMeta =
+    employeeSections.find((section) => section.id === activeSection) || employeeSections[0];
+
   return (
     <main className="app-shell" aria-label="Employee dashboard">
       <div className="mx-auto max-w-7xl">
-        <Header changeUser={props.changeUser} data={currentEmployee} />
-        <TaskListNumber data={currentEmployee} />
-        <TaskList
+        <Header
+          changeUser={props.changeUser}
           data={currentEmployee}
-          onEmployeeUpdate={props.onEmployeeUpdate}
+          sections={employeeSections}
+          activeSection={activeSection}
+          onSectionChange={setActiveSection}
+          activeSectionMeta={activeSectionMeta}
+          description="Move between your summary, task board, and activity feed without scrolling through one long page."
         />
+
+        {activeSection === "overview" ? (
+          <>
+            <TaskListNumber data={currentEmployee} />
+            <EmployeeInsights data={currentEmployee} />
+          </>
+        ) : null}
+
+        {activeSection === "board" ? (
+          <TaskList
+            data={currentEmployee}
+            onEmployeeUpdate={props.onEmployeeUpdate}
+          />
+        ) : null}
+
+        {activeSection === "activity" ? (
+          <ActivityTimeline
+            title="Your recent activity"
+            subtitle="See the latest progress updates, completions, and review moments tied to your tasks."
+            items={recentActivity}
+          />
+        ) : null}
       </div>
     </main>
   );

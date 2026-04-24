@@ -20,7 +20,7 @@ const Login = ({ handleLogin, loginError, isSubmitting }) => {
       <div className="grid w-full max-w-6xl gap-8 lg:grid-cols-[1.1fr_0.9fr]">
         <section className="panel-strong hidden rounded-[32px] p-10 lg:flex lg:flex-col lg:justify-between">
           <div className="max-w-xl">
-            <span className="status-pill bg-emerald-400/12 text-emerald-200">
+            <span className="status-pill bg-blue-400/12 text-blue-200">
               Workforce command center
             </span>
             <h1 className="mt-6 text-5xl font-semibold leading-tight text-white">
@@ -54,7 +54,7 @@ const Login = ({ handleLogin, loginError, isSubmitting }) => {
           className="w-full rounded-[28px] border border-white/8 bg-black/20 p-6 sm:p-8"
         >
           <div className="mb-8">
-            <p className="text-sm uppercase tracking-[0.32em] text-emerald-300/80">
+            <p className="text-sm uppercase tracking-[0.32em] text-blue-300/80">
               Employee Management System
             </p>
             <h2 className="mt-3 text-3xl font-semibold text-white">Sign in</h2>
@@ -101,11 +101,11 @@ const Login = ({ handleLogin, loginError, isSubmitting }) => {
             </div>
 
             <label
-              className="mt-1 flex items-center gap-3 text-sm text-emerald-100/90"
+              className="mt-1 flex items-center gap-3 text-sm text-blue-100/90"
               htmlFor="rememberMe"
             >
             <input
-                className="h-4 w-4 rounded accent-emerald-400"
+                className="h-4 w-4 rounded accent-blue-400"
               type="checkbox"
               id="rememberMe"
                 checked={rememberMe}

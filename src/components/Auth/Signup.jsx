@@ -23,15 +23,15 @@ const Signup = ({ handleSignup, signupError, isSubmitting }) => {
       <div className="grid w-full max-w-6xl gap-8 lg:grid-cols-[1.1fr_0.9fr]">
         <section className="panel-strong hidden rounded-[32px] p-10 lg:flex lg:flex-col lg:justify-between">
           <div className="max-w-xl">
-            <span className="status-pill bg-blue-400/12 text-blue-200">
+            <span className="status-pill bg-sky-400/12 text-sky-200">
               Create your account
             </span>
             <h1 className="mt-6 text-5xl font-semibold leading-tight text-white">
               Join our workforce management platform.
             </h1>
             <p className="mt-5 max-w-lg text-base leading-7 text-slate-300">
-              Your role is automatically assigned based on your company code. 
-              Credentials will be sent to your email for secure onboarding.
+              Your role is automatically assigned based on your company code.
+              We will send your generated work email to your inbox, but your password stays private and is never emailed.
             </p>
           </div>
           <div className="grid gap-4 sm:grid-cols-3">
@@ -56,7 +56,7 @@ const Signup = ({ handleSignup, signupError, isSubmitting }) => {
             className="w-full rounded-[28px] border border-white/8 bg-black/20 p-6 sm:p-8"
           >
             <div className="mb-8">
-              <p className="text-sm uppercase tracking-[0.32em] text-blue-300/80">
+              <p className="text-sm uppercase tracking-[0.32em] text-sky-300/80">
                 Employee Management System
               </p>
               <h2 className="mt-3 text-3xl font-semibold text-white">Create Account</h2>
@@ -86,7 +86,7 @@ const Signup = ({ handleSignup, signupError, isSubmitting }) => {
                   placeholder="Enter your full name"
                 />
                 <p className="mt-2 text-xs text-slate-400">
-                  Your work email will be: <span className="font-mono text-blue-300">{firstName.toLowerCase()}@[role].com</span>
+                  Your work email will be: <span className="font-mono text-sky-300">{firstName.toLowerCase()}@[role].com</span>
                 </p>
               </div>
 
@@ -104,7 +104,7 @@ const Signup = ({ handleSignup, signupError, isSubmitting }) => {
                   placeholder="your.email@example.com"
                 />
                 <p className="mt-2 text-xs text-slate-400">
-                  We'll send your work email & password here.
+                  We will send your generated work email here.
                 </p>
               </div>
 
@@ -138,8 +138,11 @@ const Signup = ({ handleSignup, signupError, isSubmitting }) => {
                   required
                   className="field-input"
                   type="password"
-                  placeholder="Enter your password"
+                  placeholder="Use at least 8 characters"
                 />
+                <p className="mt-2 text-xs text-slate-400">
+                  This password is stored securely and will not be sent by email.
+                </p>
               </div>
             </div>
 
@@ -152,7 +155,7 @@ const Signup = ({ handleSignup, signupError, isSubmitting }) => {
             </button>
 
             <p className="mt-5 text-center text-xs leading-5 text-slate-500">
-              Work email will be auto-generated and sent with your credentials.
+              Your work email will be auto-generated and emailed to you after signup.
             </p>
           </form>
         </div>

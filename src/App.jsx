@@ -149,7 +149,7 @@ const App = () => {
         token: response.token,
         email: response.user.email,
         role: response.user.role,
-        data: null,
+        data: response.employee || null,
       };
 
       if (response.user.role === "admin") {
@@ -220,7 +220,7 @@ const App = () => {
                   Already have an account?{" "}
                   <button
                     onClick={() => setShowSignup(false)}
-                    className="text-emerald-400 hover:text-emerald-300 underline"
+                    className="text-blue-400 hover:text-blue-300 underline"
                   >
                     Sign in
                   </button>

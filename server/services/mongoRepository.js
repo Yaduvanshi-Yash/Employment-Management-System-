@@ -1,4 +1,5 @@
 import bcrypt from "bcryptjs";
+import mongoose from "mongoose";
 import { Task } from "../models/Task.js";
 import { User } from "../models/User.js";
 import {
@@ -32,6 +33,8 @@ const sanitizeMongoUser = (user) => ({
   createdAt: user.createdAt,
   updatedAt: user.updatedAt,
 });
+
+const isValidObjectId = (value) => mongoose.isValidObjectId(value);
 
 export const buildUniqueWorkEmail = async (firstName, role, emailExistsChecker = checkEmailExists) => {
   const emailDomain = role === "admin" ? "admin.com" : "emp.com";
@@ -68,6 +71,10 @@ export const findUserByCredentials = async (email, password) => {
 };
 
 export const getCurrentUserById = async (userId) => {
+  if (!isValidObjectId(userId)) {
+    return null;
+  }
+
   const user = await User.findById(userId);
 
   if (!user || !user.isActive) {
@@ -98,6 +105,10 @@ export const getAllEmployees = async () => {
 };
 
 export const getEmployeeById = async (employeeId) => {
+  if (!isValidObjectId(employeeId)) {
+    return null;
+  }
+
   const employee = await User.findOne({
     _id: employeeId,
     role: "employee",
@@ -128,6 +139,10 @@ export const getEmployeeByEmail = async (email) => {
 };
 
 export const getEmployeeTasks = async (employeeId) => {
+  if (!isValidObjectId(employeeId)) {
+    return null;
+  }
+
   const employee = await User.findOne({
     _id: employeeId,
     role: "employee",
@@ -149,6 +164,10 @@ export const getEmployeeTasks = async (employeeId) => {
 };
 
 export const getEmployeePerformanceSummary = async (employeeId) => {
+  if (!isValidObjectId(employeeId)) {
+    return null;
+  }
+
   const employee = await User.findOne({
     _id: employeeId,
     role: "employee",
@@ -172,6 +191,10 @@ export const createTaskForEmployee = async ({
   employeeId,
   createdBy,
 }) => {
+  if (!isValidObjectId(employeeId) || !isValidObjectId(createdBy)) {
+    return null;
+  }
+
   const employee = await User.findOne({
     _id: employeeId,
     role: "employee",
@@ -215,6 +238,10 @@ export const createTaskForEmployee = async ({
 };
 
 export const updateTaskStatus = async ({ taskId, status, requester }) => {
+  if (!isValidObjectId(taskId)) {
+    return { error: "not_found" };
+  }
+
   const task = await Task.findById(taskId);
 
   if (!task) {
@@ -250,6 +277,10 @@ export const updateTaskStatus = async ({ taskId, status, requester }) => {
 };
 
 export const reviewTask = async ({ taskId, rating, feedback, reviewer }) => {
+  if (!isValidObjectId(taskId)) {
+    return { error: "not_found" };
+  }
+
   const task = await Task.findById(taskId);
 
   if (!task) {

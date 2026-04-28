@@ -9,8 +9,8 @@ const priorityClassNames = {
 
 const FailedTask = ({ data, onAccept, onReset }) => {
   return (
-    <article className="task-card panel-strong flex min-h-80 shrink-0 flex-col rounded-[24px] border-rose-300/15 bg-gradient-to-br from-rose-400/16 to-slate-900/85 p-5">
-      <div className="flex items-start justify-between gap-3">
+    <article className="task-card panel-strong flex min-h-80 min-w-0 flex-col rounded-[24px] border-rose-300/15 bg-gradient-to-br from-rose-400/16 to-slate-900/85 p-5">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex flex-wrap gap-2">
           <span className="status-pill bg-rose-400/16 text-rose-100">
             {data.category}
@@ -32,7 +32,7 @@ const FailedTask = ({ data, onAccept, onReset }) => {
           {data.taskDescription}
         </p>
       </div>
-      <div className="mt-6 grid grid-cols-2 gap-3">
+      <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
         <button onClick={onAccept} className="btn-secondary w-full">
           Retry
         </button>

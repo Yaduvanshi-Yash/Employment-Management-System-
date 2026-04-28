@@ -3,7 +3,7 @@ import CompleteTask from "./CompleteTask";
 import FailedTask from "./FailedTask";
 import NewTask from "./NewTask";
 import { AuthContext } from "../../context/AuthContext";
-import { useContext, useState } from "react";
+import { useContext, useMemo, useState } from "react";
 import {
   getStoredSession,
   getStoredToken,
@@ -12,10 +12,35 @@ import {
 } from "../../utils/SessionStorage";
 import { apiRequest } from "../../utils/api";
 
+const statusOrder = {
+  new: 0,
+  active: 1,
+  failed: 2,
+  complete: 3,
+};
+
 const TaskList = ({ data, onEmployeeUpdate }) => {
   const { upsertEmployee } = useContext(AuthContext);
   const [updatingTaskId, setUpdatingTaskId] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const sortedTasks = useMemo(
+    () => {
+      const tasks = data?.tasks || [];
+
+      return [...tasks].sort((left, right) => {
+        const leftOrder = statusOrder[left.status] ?? 99;
+        const rightOrder = statusOrder[right.status] ?? 99;
+
+        if (leftOrder !== rightOrder) {
+          return leftOrder - rightOrder;
+        }
+
+        return new Date(left.taskDate) - new Date(right.taskDate);
+      });
+    },
+    [data?.tasks],
+  );
 
   if (!data?.tasks) {
     return null;
@@ -66,26 +91,6 @@ const TaskList = ({ data, onEmployeeUpdate }) => {
     }
   };
 
-  const handleAccept = (taskIndex) => {
-    const currentTask = data.tasks[taskIndex];
-    updateTaskStatus(currentTask.id, "active");
-  };
-
-  const handleMoveToNew = (taskIndex) => {
-    const currentTask = data.tasks[taskIndex];
-    updateTaskStatus(currentTask.id, "new");
-  };
-
-  const handleComplete = (taskIndex) => {
-    const currentTask = data.tasks[taskIndex];
-    updateTaskStatus(currentTask.id, "complete");
-  };
-
-  const handleFail = (taskIndex) => {
-    const currentTask = data.tasks[taskIndex];
-    updateTaskStatus(currentTask.id, "failed");
-  };
-
   return (
     <section className="panel-strong mt-8 rounded-[28px] p-6 sm:p-8">
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
@@ -109,10 +114,10 @@ const TaskList = ({ data, onEmployeeUpdate }) => {
 
       <div
         id="tasklist"
-        className="task-board flex min-h-80 gap-5 overflow-x-auto pb-2"
+        className="task-board grid min-h-80 gap-5 md:grid-cols-2 xl:grid-cols-3"
         aria-label="Employee task list"
       >
-        {data.tasks.map((elem, idx) => {
+        {sortedTasks.map((elem, idx) => {
           const taskKey = elem.id || idx;
           const isUpdating = updatingTaskId === elem.id;
 
@@ -121,8 +126,8 @@ const TaskList = ({ data, onEmployeeUpdate }) => {
               <AcceptTask
                 key={taskKey}
                 data={elem}
-                onComplete={() => !isUpdating && handleComplete(idx)}
-                onFail={() => !isUpdating && handleFail(idx)}
+                onComplete={() => !isUpdating && updateTaskStatus(elem.id, "complete")}
+                onFail={() => !isUpdating && updateTaskStatus(elem.id, "failed")}
               />
             );
           }
@@ -131,7 +136,7 @@ const TaskList = ({ data, onEmployeeUpdate }) => {
               <CompleteTask
                 key={taskKey}
                 data={elem}
-                onAccept={() => !isUpdating && handleAccept(idx)}
+                onAccept={() => !isUpdating && updateTaskStatus(elem.id, "active")}
               />
             );
           }
@@ -140,8 +145,8 @@ const TaskList = ({ data, onEmployeeUpdate }) => {
               <FailedTask
                 key={taskKey}
                 data={elem}
-                onAccept={() => !isUpdating && handleAccept(idx)}
-                onReset={() => !isUpdating && handleMoveToNew(idx)}
+                onAccept={() => !isUpdating && updateTaskStatus(elem.id, "active")}
+                onReset={() => !isUpdating && updateTaskStatus(elem.id, "new")}
               />
             );
           }
@@ -150,8 +155,8 @@ const TaskList = ({ data, onEmployeeUpdate }) => {
               <NewTask
                 key={taskKey}
                 data={elem}
-                onAccept={() => !isUpdating && handleAccept(idx)}
-                onFail={() => !isUpdating && handleFail(idx)}
+                onAccept={() => !isUpdating && updateTaskStatus(elem.id, "active")}
+                onFail={() => !isUpdating && updateTaskStatus(elem.id, "failed")}
               />
             );
           }

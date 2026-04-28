@@ -2,8 +2,8 @@ const renderRatingLabel = (rating) => `${rating}/5 performance rating`;
 
 const CompleteTask = ({ data, onAccept }) => {
   return (
-    <article className="task-card panel-strong flex min-h-80 shrink-0 flex-col rounded-[24px] border-blue-300/15 bg-gradient-to-br from-blue-400/16 to-slate-900/85 p-5">
-      <div className="flex items-start justify-between gap-3">
+    <article className="task-card panel-strong flex min-h-80 min-w-0 flex-col rounded-[24px] border-blue-300/15 bg-gradient-to-br from-blue-400/16 to-slate-900/85 p-5">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <span className="status-pill bg-blue-400/16 text-blue-100">
           {data.category}
         </span>
@@ -34,7 +34,7 @@ const CompleteTask = ({ data, onAccept }) => {
           </div>
         )}
       </div>
-      <div className="mt-6 grid grid-cols-2 gap-3">
+      <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
         <span className="btn-success w-full">Completed</span>
         <button onClick={onAccept} className="btn-secondary w-full">
           Reopen

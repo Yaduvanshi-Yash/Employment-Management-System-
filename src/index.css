@@ -163,7 +163,7 @@ textarea {
 }
 
 .task-card {
-  width: min(320px, 85vw);
+  width: 100%;
 }
 
 .task-board::-webkit-scrollbar,

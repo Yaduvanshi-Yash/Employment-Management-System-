@@ -36,6 +36,32 @@ const sanitizeMongoUser = (user) => ({
 
 const isValidObjectId = (value) => mongoose.isValidObjectId(value);
 
+const normalizeTaskPriority = (priority) =>
+  ["low", "medium", "high", "urgent"].includes(priority) ? priority : "medium";
+
+const repairLegacyTaskDocument = (task, actorId) => {
+  let changed = false;
+
+  if (!task.priority || normalizeTaskPriority(task.priority) !== task.priority) {
+    task.priority = normalizeTaskPriority(task.priority);
+    changed = true;
+  }
+
+  if (!task.status || !["new", "active", "complete", "failed"].includes(task.status)) {
+    task.status = "new";
+    changed = true;
+  }
+
+  if (!task.createdBy && isValidObjectId(actorId)) {
+    task.createdBy = actorId;
+    changed = true;
+  }
+
+  task.activityLog ||= [];
+
+  return changed;
+};
+
 export const buildUniqueWorkEmail = async (firstName, role, emailExistsChecker = checkEmailExists) => {
   const emailDomain = role === "admin" ? "admin.com" : "emp.com";
   const baseName =
@@ -252,6 +278,7 @@ export const updateTaskStatus = async ({ taskId, status, requester }) => {
     return { error: "forbidden" };
   }
 
+  repairLegacyTaskDocument(task, requester.id);
   task.status = status;
   task.completedAt = status === "complete" ? new Date() : null;
   if (status !== "complete" && task.review) {
@@ -295,6 +322,7 @@ export const reviewTask = async ({ taskId, rating, feedback, reviewer }) => {
     return { error: "invalid_state" };
   }
 
+  repairLegacyTaskDocument(task, reviewer.id);
   task.review = {
     rating,
     feedback,

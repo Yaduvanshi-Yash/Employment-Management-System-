@@ -19,7 +19,14 @@ const statusMap = {
 
 router.post("/", requireAuth, requireAdmin, async (req, res, next) => {
   try {
-    const { taskTitle, taskDescription, taskDate, category, priority, employeeId } = req.body;
+    const {
+      taskTitle,
+      taskDescription,
+      taskDate,
+      category,
+      priority,
+      employeeId,
+    } = req.body || {};
 
     if (!taskTitle || !taskDescription || !taskDate || !category || !employeeId) {
       return res.status(400).json({
@@ -98,7 +105,7 @@ router.post("/", requireAuth, requireAdmin, async (req, res, next) => {
 
 router.patch("/:taskId/status", requireAuth, async (req, res, next) => {
   try {
-    const { status } = req.body;
+    const { status } = req.body || {};
 
     if (!statusMap[status]) {
       return res.status(400).json({
@@ -188,7 +195,7 @@ router.patch("/:taskId/status", requireAuth, async (req, res, next) => {
 
 router.patch("/:taskId/review", requireAuth, requireAdmin, async (req, res, next) => {
   try {
-    const { rating, feedback = "" } = req.body;
+    const { rating, feedback = "" } = req.body || {};
 
     if (!Number.isInteger(rating) || rating < 1 || rating > 5) {
       return res.status(400).json({ message: "Rating must be an integer between 1 and 5." });

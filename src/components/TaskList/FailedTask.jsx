@@ -1,43 +1,44 @@
-import React from "react";
-
 const priorityClassNames = {
-  low: "bg-slate-400/16 text-slate-100",
-  medium: "bg-blue-400/16 text-blue-100",
-  high: "bg-amber-300/16 text-amber-100",
-  urgent: "bg-rose-400/16 text-rose-100",
+  low: "priority-low",
+  medium: "priority-medium",
+  high: "priority-high",
+  urgent: "priority-urgent",
 };
 
-const FailedTask = ({ data, onAccept, onReset }) => {
+const FailedTask = ({ data, onAccept, onReset, isUpdating }) => {
   return (
-    <article className="task-card panel-strong flex min-h-80 min-w-0 flex-col rounded-[24px] border-rose-300/15 bg-gradient-to-br from-rose-400/16 to-slate-900/85 p-5">
+    <article className="task-card task-card--failed panel-strong flex min-h-80 min-w-0 flex-col rounded-[24px] border-rose-200/80 bg-gradient-to-br from-rose-50 via-white to-orange-50 p-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex flex-wrap gap-2">
-          <span className="status-pill bg-rose-400/16 text-rose-100">
+          <span className="status-pill status-failed">
+            Needs Attention
+          </span>
+          <span className="status-pill bg-white/80 text-slate-700 shadow-sm">
             {data.category}
           </span>
           <span className={`status-pill ${priorityClassNames[data.priority] || priorityClassNames.medium}`}>
             {data.priority || "medium"}
           </span>
           {data.isOverdue ? (
-            <span className="status-pill bg-rose-400/16 text-rose-100">Overdue</span>
+            <span className="status-pill bg-rose-50 text-rose-700">Overdue</span>
           ) : null}
         </div>
-        <span className="text-xs font-medium uppercase tracking-[0.18em] text-slate-400">
+        <span className="text-xs font-medium uppercase tracking-[0.18em] text-slate-500">
           {data.taskDate}
         </span>
       </div>
       <div className="mt-6 flex-1">
-        <h3 className="text-2xl font-semibold text-white">{data.taskTitle}</h3>
-        <p className="mt-3 text-sm leading-6 text-slate-300">
+        <h3 className="text-2xl font-semibold text-slate-800">{data.taskTitle}</h3>
+        <p className="mt-3 text-sm leading-6 text-slate-600">
           {data.taskDescription}
         </p>
       </div>
       <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <button onClick={onAccept} className="btn-secondary w-full">
-          Retry
+        <button onClick={onAccept} disabled={isUpdating} className="btn-info w-full disabled:cursor-not-allowed disabled:opacity-60">
+          {isUpdating ? "Updating..." : "Retry Task"}
         </button>
-        <button onClick={onReset} className="btn-danger w-full">
-          Reset
+        <button onClick={onReset} disabled={isUpdating} className="btn-danger w-full disabled:cursor-not-allowed disabled:opacity-60">
+          Reset to New
         </button>
       </div>
     </article>

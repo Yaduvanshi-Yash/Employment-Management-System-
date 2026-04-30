@@ -20,13 +20,13 @@ const Login = ({ handleLogin, loginError, isSubmitting }) => {
       <div className="grid w-full max-w-6xl gap-8 lg:grid-cols-[1.1fr_0.9fr]">
         <section className="panel-strong hidden rounded-[32px] p-10 lg:flex lg:flex-col lg:justify-between">
           <div className="max-w-xl">
-            <span className="status-pill bg-blue-400/12 text-blue-200">
+            <span className="status-pill border border-amber-200/60 bg-amber-100 text-amber-800">
               Workforce command center
             </span>
-            <h1 className="mt-6 text-5xl font-semibold leading-tight text-white">
+            <h1 className="mt-6 text-5xl font-semibold leading-tight text-slate-800">
               Manage teams, tasks, and delivery without losing clarity.
             </h1>
-            <p className="mt-5 max-w-lg text-base leading-7 text-slate-300">
+            <p className="mt-5 max-w-lg text-base leading-7 text-slate-600">
               Your existing EMS theme is preserved, but the interface is now
               structured like a polished operations dashboard with cleaner
               spacing, stronger hierarchy, and calmer surfaces.
@@ -34,16 +34,16 @@ const Login = ({ handleLogin, loginError, isSubmitting }) => {
           </div>
           <div className="grid gap-4 sm:grid-cols-3">
             <div className="panel rounded-3xl p-5">
-              <p className="text-sm text-slate-400">Task visibility</p>
-              <p className="mt-3 text-2xl font-semibold text-white">Live</p>
+              <p className="text-sm text-slate-500">Task visibility</p>
+              <p className="mt-3 text-2xl font-semibold text-slate-800">Live</p>
             </div>
             <div className="panel rounded-3xl p-5">
-              <p className="text-sm text-slate-400">Status tracking</p>
-              <p className="mt-3 text-2xl font-semibold text-white">Clear</p>
+              <p className="text-sm text-slate-500">Status tracking</p>
+              <p className="mt-3 text-2xl font-semibold text-slate-800">Clear</p>
             </div>
             <div className="panel rounded-3xl p-5">
-              <p className="text-sm text-slate-400">Team workflow</p>
-              <p className="mt-3 text-2xl font-semibold text-white">Simple</p>
+              <p className="text-sm text-slate-500">Team workflow</p>
+              <p className="mt-3 text-2xl font-semibold text-slate-800">Simple</p>
             </div>
           </div>
         </section>
@@ -51,14 +51,14 @@ const Login = ({ handleLogin, loginError, isSubmitting }) => {
         <div className="panel-strong mx-auto flex w-full max-w-md items-center justify-center rounded-[32px] p-4 sm:p-6">
         <form
           onSubmit={submitHandler}
-          className="w-full rounded-[28px] border border-white/8 bg-black/20 p-6 sm:p-8"
+          className="w-full rounded-[28px] border border-amber-100/70 bg-white/80 p-6 sm:p-8"
         >
           <div className="mb-8">
-            <p className="text-sm uppercase tracking-[0.32em] text-blue-300/80">
+            <p className="text-sm uppercase tracking-[0.32em] text-amber-700/80">
               Employee Management System
             </p>
-            <h2 className="mt-3 text-3xl font-semibold text-white">Sign in</h2>
-            <p className="mt-2 text-sm leading-6 text-slate-400">
+            <h2 className="mt-3 text-3xl font-semibold text-slate-800">Sign in</h2>
+            <p className="mt-2 text-sm leading-6 text-slate-600">
               Access your dashboard with the same credentials and workflow.
             </p>
           </div>
@@ -101,11 +101,11 @@ const Login = ({ handleLogin, loginError, isSubmitting }) => {
             </div>
 
             <label
-              className="mt-1 flex items-center gap-3 text-sm text-blue-100/90"
+              className="mt-1 flex items-center gap-3 text-sm text-slate-600"
               htmlFor="rememberMe"
             >
             <input
-                className="h-4 w-4 rounded accent-blue-400"
+                className="h-4 w-4 rounded accent-amber-600"
               type="checkbox"
               id="rememberMe"
                 checked={rememberMe}

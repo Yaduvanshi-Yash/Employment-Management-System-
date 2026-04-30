@@ -8,6 +8,8 @@ import CreateTask from "../Other/CreateTask";
 import Header from "../Other/Header";
 import TaskCalendarView from "../Other/TaskCalendarView";
 
+const ANALYTICS_REFRESH_INTERVAL_MS = 30000;
+
 const adminSections = [
   {
     id: "overview",
@@ -36,7 +38,7 @@ const AdminDashboard = (props) => {
   const [isAnalyticsLoading, setIsAnalyticsLoading] = useState(true);
   const [activeSection, setActiveSection] = useState("overview");
 
-  const refreshAnalytics = async () => {
+  const refreshAnalytics = async ({ silent = false } = {}) => {
     const token = getStoredToken();
     if (!token) {
       setAnalytics(null);
@@ -44,7 +46,9 @@ const AdminDashboard = (props) => {
       return;
     }
 
-    setIsAnalyticsLoading(true);
+    if (!silent) {
+      setIsAnalyticsLoading(true);
+    }
     try {
       const response = await apiRequest("/analytics/admin", {
         headers: {
@@ -61,6 +65,16 @@ const AdminDashboard = (props) => {
 
   useEffect(() => {
     refreshAnalytics();
+  }, []);
+
+  useEffect(() => {
+    const intervalId = window.setInterval(() => {
+      refreshAnalytics({ silent: true });
+    }, ANALYTICS_REFRESH_INTERVAL_MS);
+
+    return () => {
+      window.clearInterval(intervalId);
+    };
   }, []);
 
   const activeSectionMeta =

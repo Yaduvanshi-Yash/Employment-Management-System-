@@ -11,10 +11,10 @@ const statusLabels = {
 };
 
 const priorityClassNames = {
-  low: "bg-slate-400/16 text-slate-100 border-slate-300/20",
-  medium: "bg-blue-400/16 text-blue-100 border-blue-300/20",
-  high: "bg-amber-300/16 text-amber-100 border-amber-300/20",
-  urgent: "bg-rose-400/16 text-rose-100 border-rose-300/20",
+  low: "bg-slate-100 text-slate-700 border-slate-200",
+  medium: "bg-teal-50 text-teal-700 border-teal-200",
+  high: "bg-amber-50 text-amber-700 border-amber-200",
+  urgent: "bg-rose-50 text-rose-700 border-rose-200",
 };
 
 const renderRatingLabel = (rating) => `${rating}/5 performance rating`;
@@ -161,10 +161,10 @@ const AllTask = ({ onTaskReviewed }) => {
     <section className="panel-strong mt-8 rounded-[28px] p-6 sm:p-8">
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-sm uppercase tracking-[0.24em] text-blue-300/80">
+          <p className="text-sm uppercase tracking-[0.24em] text-amber-700/80">
             Task explorer
           </p>
-          <h2 className="mt-2 text-2xl font-semibold text-white">
+          <h2 className="mt-2 text-2xl font-semibold text-slate-800">
             Search, filter, export, and review tasks
           </h2>
         </div>
@@ -227,14 +227,14 @@ const AllTask = ({ onTaskReviewed }) => {
         </p>
       ) : null}
       {reviewSuccess ? (
-        <p className="mt-5 rounded-2xl border border-blue-400/20 bg-blue-400/10 px-4 py-3 text-sm text-blue-100">
+        <p className="mt-5 rounded-2xl border border-emerald-300/30 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
           {reviewSuccess}
         </p>
       ) : null}
 
       <div className="mt-6 space-y-4">
         {isEmployeesLoading ? (
-          <div className="rounded-[22px] border border-white/8 px-5 py-6 text-sm text-slate-400">
+          <div className="rounded-[22px] border border-slate-200 px-5 py-6 text-sm text-slate-500">
             Loading task explorer...
           </div>
         ) : null}
@@ -243,12 +243,12 @@ const AllTask = ({ onTaskReviewed }) => {
           filteredTasks.map((task) => (
             <div
               key={task.id}
-              className="rounded-[24px] border border-white/8 bg-white/4 p-5"
+              className="rounded-[24px] border border-slate-200 bg-white/70 p-5"
             >
               <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                 <div className="max-w-3xl">
                   <div className="flex flex-wrap gap-2">
-                    <span className="status-pill bg-blue-400/16 text-blue-100">
+                    <span className="status-pill bg-amber-50 text-amber-700">
                       {task.category}
                     </span>
                     <span
@@ -256,7 +256,7 @@ const AllTask = ({ onTaskReviewed }) => {
                     >
                       {task.priority || "medium"}
                     </span>
-                    <span className="status-pill bg-white/10 text-slate-200">
+                    <span className="status-pill bg-slate-100 text-slate-700">
                       {statusLabels[task.status] || task.status}
                     </span>
                     {task.isOverdue ? (
@@ -265,11 +265,11 @@ const AllTask = ({ onTaskReviewed }) => {
                       </span>
                     ) : null}
                   </div>
-                  <h3 className="mt-4 text-xl font-semibold text-white">{task.taskTitle}</h3>
-                  <p className="mt-2 text-sm leading-6 text-slate-300">
+                  <h3 className="mt-4 text-xl font-semibold text-slate-800">{task.taskTitle}</h3>
+                  <p className="mt-2 text-sm leading-6 text-slate-600">
                     {task.taskDescription}
                   </p>
-                  <div className="mt-4 grid gap-3 text-sm text-slate-400 sm:grid-cols-3">
+                  <div className="mt-4 grid gap-3 text-sm text-slate-600 sm:grid-cols-3">
                     <p>
                       <span className="text-slate-500">Employee:</span> {task.employeeName}
                     </p>
@@ -282,16 +282,16 @@ const AllTask = ({ onTaskReviewed }) => {
                   </div>
                 </div>
 
-                <div className="w-full max-w-sm rounded-[20px] border border-white/8 bg-black/15 p-4">
+                <div className="w-full max-w-sm rounded-[20px] border border-slate-200 bg-slate-50/80 p-4">
                   <p className="text-xs uppercase tracking-[0.18em] text-slate-500">
                     Review status
                   </p>
                   {task.review ? (
                     <div className="mt-3">
-                      <p className="text-sm font-semibold text-white">
+                      <p className="text-sm font-semibold text-slate-800">
                         {renderRatingLabel(task.review.rating)}
                       </p>
-                      <p className="mt-2 text-sm text-slate-300">
+                      <p className="mt-2 text-sm text-slate-600">
                         {task.review.feedback || "No written feedback added."}
                       </p>
                     </div>
@@ -359,7 +359,7 @@ const AllTask = ({ onTaskReviewed }) => {
                       )}
                     </div>
                   ) : (
-                    <div className="mt-4 rounded-[16px] border border-dashed border-white/10 px-4 py-3 text-sm text-slate-500">
+                    <div className="mt-4 rounded-[16px] border border-dashed border-slate-200 px-4 py-3 text-sm text-slate-500">
                       Review becomes available after the task is completed.
                     </div>
                   )}
@@ -370,7 +370,7 @@ const AllTask = ({ onTaskReviewed }) => {
         ) : null}
 
         {!isEmployeesLoading && !filteredTasks.length ? (
-          <div className="rounded-[22px] border border-dashed border-white/10 px-5 py-6 text-sm text-slate-400">
+          <div className="rounded-[22px] border border-dashed border-slate-200 px-5 py-6 text-sm text-slate-500">
             No tasks matched the current filters.
           </div>
         ) : null}

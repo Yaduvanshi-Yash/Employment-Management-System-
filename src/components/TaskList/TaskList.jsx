@@ -95,19 +95,19 @@ const TaskList = ({ data, onEmployeeUpdate }) => {
     <section className="panel-strong mt-8 rounded-[28px] p-6 sm:p-8">
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-sm uppercase tracking-[0.24em] text-blue-300/80">
+          <p className="text-sm uppercase tracking-[0.24em] text-amber-700/80">
             Assigned work
           </p>
-          <h2 className="mt-2 text-2xl font-semibold text-white">
+          <h2 className="mt-2 text-2xl font-semibold text-slate-800">
             Task board
           </h2>
         </div>
-        <p className="text-sm text-slate-400">
+        <p className="text-sm text-slate-600">
           Review the queue and update progress directly from each card.
         </p>
       </div>
       {errorMessage ? (
-        <p className="mb-5 rounded-2xl border border-rose-400/20 bg-rose-400/10 px-4 py-3 text-sm text-rose-100">
+        <p className="mb-5 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
           {errorMessage}
         </p>
       ) : null}
@@ -126,6 +126,7 @@ const TaskList = ({ data, onEmployeeUpdate }) => {
               <AcceptTask
                 key={taskKey}
                 data={elem}
+                isUpdating={isUpdating}
                 onComplete={() => !isUpdating && updateTaskStatus(elem.id, "complete")}
                 onFail={() => !isUpdating && updateTaskStatus(elem.id, "failed")}
               />
@@ -136,6 +137,7 @@ const TaskList = ({ data, onEmployeeUpdate }) => {
               <CompleteTask
                 key={taskKey}
                 data={elem}
+                isUpdating={isUpdating}
                 onAccept={() => !isUpdating && updateTaskStatus(elem.id, "active")}
               />
             );
@@ -145,6 +147,7 @@ const TaskList = ({ data, onEmployeeUpdate }) => {
               <FailedTask
                 key={taskKey}
                 data={elem}
+                isUpdating={isUpdating}
                 onAccept={() => !isUpdating && updateTaskStatus(elem.id, "active")}
                 onReset={() => !isUpdating && updateTaskStatus(elem.id, "new")}
               />
@@ -155,6 +158,7 @@ const TaskList = ({ data, onEmployeeUpdate }) => {
               <NewTask
                 key={taskKey}
                 data={elem}
+                isUpdating={isUpdating}
                 onAccept={() => !isUpdating && updateTaskStatus(elem.id, "active")}
                 onFail={() => !isUpdating && updateTaskStatus(elem.id, "failed")}
               />

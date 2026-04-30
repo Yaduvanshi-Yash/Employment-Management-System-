@@ -1,6 +1,23 @@
 import jwt from "jsonwebtoken";
 
-const getJwtSecret = () => process.env.JWT_SECRET || "ems-dev-secret-change-me";
+const DEV_JWT_SECRET = "ems-dev-secret-change-me";
+
+const getJwtSecret = () => {
+  const jwtSecret = process.env.JWT_SECRET;
+  const isProduction = process.env.NODE_ENV === "production";
+
+  if (!jwtSecret) {
+    if (isProduction) {
+      throw new Error(
+        "JWT_SECRET is required in production. Refusing to start with the default development secret.",
+      );
+    }
+
+    return DEV_JWT_SECRET;
+  }
+
+  return jwtSecret;
+};
 
 export const createSession = (user) =>
   jwt.sign(
@@ -11,7 +28,7 @@ export const createSession = (user) =>
     },
     getJwtSecret(),
     {
-      expiresIn: "7d",
+      expiresIn: "2d",
     },
   );
 

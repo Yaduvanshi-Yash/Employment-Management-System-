@@ -132,6 +132,8 @@ EMPLOYEE_COMPANY_CODES=3456,7890,2345
 - Local development can run with MongoDB or the JSON fallback store
 - Registration supports company-code-based role assignment
 - Email delivery is optional; signup still works if Gmail SMTP is not configured
+- Production deployment should always use MongoDB; the backend now refuses to start in production without `MONGODB_URI`
+- Production deployment also requires `JWT_SECRET`; the backend refuses to start without it in `NODE_ENV=production`
 
 ## Why This Project Is Strong For A Resume
 
@@ -158,6 +160,29 @@ Recommended order:
 3. Set the frontend `VITE_API_URL`
 4. Deploy the frontend
 5. Run a final smoke test for login, task creation, status updates, analytics, and reviews
+
+Important deployment note:
+
+- Do not seed production unless you intentionally want the demo users and task data from `server/data/seedData.js`
+
+## Git Upload
+
+When you are ready to upload the repo:
+
+```bash
+git status
+git diff --stat
+git add .
+git commit -m "Polish dashboard UI and prepare deployment"
+git push -u origin main
+```
+
+If GitHub remote is not configured yet:
+
+```bash
+git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO.git
+git branch -M main
+```
 
 ## Contact
 

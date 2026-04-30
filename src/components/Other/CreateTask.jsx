@@ -125,13 +125,13 @@ const CreateTask = ({ onTaskCreated }) => {
   return (
     <div className="panel-strong mt-8 rounded-[28px] p-6 sm:p-8">
       <div className="mb-8">
-        <p className="text-sm uppercase tracking-[0.24em] text-blue-300/80">
+        <p className="text-sm uppercase tracking-[0.24em] text-amber-700/80">
           Admin workspace
         </p>
-        <h2 className="mt-3 text-2xl font-semibold text-white sm:text-3xl">
+        <h2 className="mt-3 text-2xl font-semibold text-slate-800 sm:text-3xl">
           Create a new task
         </h2>
-        <p className="mt-2 text-sm leading-6 text-slate-400">
+        <p className="mt-2 text-sm leading-6 text-slate-600">
           Assign work with a cleaner input flow while keeping the same employee
           data structure and task behavior.
         </p>
@@ -143,7 +143,7 @@ const CreateTask = ({ onTaskCreated }) => {
         </p>
       ) : null}
       {successMessage ? (
-        <p className="mb-5 rounded-2xl border border-blue-400/20 bg-blue-400/10 px-4 py-3 text-sm text-blue-100">
+        <p className="mb-5 rounded-2xl border border-emerald-300/30 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
           {successMessage}
         </p>
       ) : null}
@@ -218,16 +218,16 @@ const CreateTask = ({ onTaskCreated }) => {
               placeholder="Operations, reporting, design, follow-up"
             />
           </div>
-          <div className="sm:col-span-2 rounded-[22px] border border-blue-400/20 bg-blue-400/8 p-4">
+          <div className="sm:col-span-2 rounded-[22px] border border-amber-200/80 bg-amber-50 p-4">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <p className="text-xs uppercase tracking-[0.18em] text-blue-200/80">
+                <p className="text-xs uppercase tracking-[0.18em] text-amber-700/80">
                   Smart priority suggestion
                 </p>
-                <p className="mt-2 text-lg font-semibold text-white">
+                <p className="mt-2 text-lg font-semibold text-slate-800">
                   Recommended: {recommendation.priority}
                 </p>
-                <p className="mt-1 text-sm text-slate-300">{recommendation.reason}</p>
+                <p className="mt-1 text-sm text-slate-600">{recommendation.reason}</p>
               </div>
               <button
                 type="button"

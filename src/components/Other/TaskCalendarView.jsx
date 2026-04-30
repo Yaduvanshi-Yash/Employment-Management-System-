@@ -3,10 +3,10 @@ import { useMemo, useState } from "react";
 const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 const priorityTone = {
-  low: "bg-slate-400/16 text-slate-100",
-  medium: "bg-blue-400/16 text-blue-100",
-  high: "bg-amber-300/16 text-amber-100",
-  urgent: "bg-rose-400/16 text-rose-100",
+  low: "bg-slate-100 text-slate-700",
+  medium: "bg-teal-50 text-teal-700",
+  high: "bg-amber-50 text-amber-700",
+  urgent: "bg-rose-50 text-rose-700",
 };
 
 const formatMonthLabel = (date) =>
@@ -71,10 +71,10 @@ const TaskCalendarView = ({ tasks = [] }) => {
     <section className="panel-strong mt-8 rounded-[28px] p-6 sm:p-8">
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-sm uppercase tracking-[0.24em] text-blue-300/80">
+          <p className="text-sm uppercase tracking-[0.24em] text-amber-700/80">
             Calendar view
           </p>
-          <h2 className="mt-2 text-2xl font-semibold text-white">
+          <h2 className="mt-2 text-2xl font-semibold text-slate-800">
             Task calendar and delivery planning
           </h2>
         </div>
@@ -86,7 +86,7 @@ const TaskCalendarView = ({ tasks = [] }) => {
           >
             Prev
           </button>
-          <p className="min-w-44 text-center text-sm font-semibold text-white">
+          <p className="min-w-44 text-center text-sm font-semibold text-slate-700">
             {formatMonthLabel(cursor)}
           </p>
           <button
@@ -105,14 +105,14 @@ const TaskCalendarView = ({ tasks = [] }) => {
             {weekDays.map((day) => (
               <div
                 key={day}
-                className="rounded-[16px] border border-white/8 bg-white/4 px-3 py-2 text-center text-xs uppercase tracking-[0.18em] text-slate-500"
+                className="rounded-[16px] border border-amber-100/80 bg-amber-50/60 px-3 py-2 text-center text-xs uppercase tracking-[0.18em] text-slate-500"
               >
                 {day}
               </div>
             ))}
             {gridDays.map((date, index) => {
               if (!date) {
-                return <div key={`empty-${index}`} className="h-24 rounded-[18px] bg-white/2" />;
+                return <div key={`empty-${index}`} className="h-24 rounded-[18px] bg-white/35" />;
               }
 
               const key = getDateKey(date);
@@ -121,12 +121,12 @@ const TaskCalendarView = ({ tasks = [] }) => {
               return (
                 <div
                   key={key}
-                  className="min-h-24 rounded-[18px] border border-white/8 bg-white/4 p-3"
+                  className="min-h-24 rounded-[18px] border border-slate-200 bg-white/70 p-3"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-semibold text-white">{date.getDate()}</span>
+                    <span className="text-sm font-semibold text-slate-800">{date.getDate()}</span>
                     {dayTasks.length ? (
-                      <span className="rounded-full bg-blue-400/14 px-2 py-1 text-[11px] font-semibold text-blue-100">
+                      <span className="rounded-full bg-amber-100 px-2 py-1 text-[11px] font-semibold text-amber-800">
                         {dayTasks.length}
                       </span>
                     ) : null}
@@ -151,34 +151,34 @@ const TaskCalendarView = ({ tasks = [] }) => {
         </div>
 
         <div className="panel rounded-[24px] p-5">
-          <p className="text-lg font-semibold text-white">Upcoming month highlights</p>
+          <p className="text-lg font-semibold text-slate-800">Upcoming month highlights</p>
           <div className="mt-4 space-y-3">
             {upcomingTasks.length ? (
               upcomingTasks.map((task) => (
                 <div
                   key={task.id}
-                  className="rounded-[18px] border border-white/8 bg-white/4 p-4"
+                  className="rounded-[18px] border border-slate-200 bg-white/70 p-4"
                 >
                   <div className="flex items-center justify-between gap-3">
-                    <p className="text-sm font-semibold text-white">{task.taskTitle}</p>
+                    <p className="text-sm font-semibold text-slate-800">{task.taskTitle}</p>
                     <span
                       className={`rounded-full px-3 py-1 text-xs font-semibold ${priorityTone[task.priority] || priorityTone.medium}`}
                     >
                       {task.priority}
                     </span>
                   </div>
-                  <p className="mt-2 text-sm text-slate-400">
+                  <p className="mt-2 text-sm text-slate-600">
                     {task.employeeName || "Employee"} | Due {task.taskDate}
                   </p>
                   {task.isOverdue ? (
-                    <p className="mt-2 text-xs font-semibold uppercase tracking-[0.18em] text-rose-200">
+                    <p className="mt-2 text-xs font-semibold uppercase tracking-[0.18em] text-rose-700">
                       Overdue
                     </p>
                   ) : null}
                 </div>
               ))
             ) : (
-              <div className="rounded-[18px] border border-dashed border-white/10 px-4 py-5 text-sm text-slate-400">
+              <div className="rounded-[18px] border border-dashed border-slate-200 px-4 py-5 text-sm text-slate-500">
                 No tasks are scheduled for this month yet.
               </div>
             )}

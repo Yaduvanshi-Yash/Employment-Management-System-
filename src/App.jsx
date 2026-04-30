@@ -13,6 +13,8 @@ import {
 } from "./utils/SessionStorage";
 import { apiRequest } from "./utils/api";
 
+const SESSION_REFRESH_INTERVAL_MS = 30000;
+
 const getInitialSession = () => {
   const loggedInUser = getStoredSession();
 
@@ -95,6 +97,66 @@ const App = () => {
 
     hydrateSession();
   }, [clearEmployees, refreshEmployees]);
+
+  useEffect(() => {
+    const token = session.token || getStoredToken();
+
+    if (!token || !session.role) {
+      return undefined;
+    }
+
+    let isActive = true;
+
+    const syncSession = async () => {
+      try {
+        const response = await apiRequest("/auth/me", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!isActive) {
+          return;
+        }
+
+        const nextSession = {
+          token,
+          email: response.user.email,
+          role: response.user.role,
+          data: response.employee || null,
+        };
+
+        if (response.user.role === "admin") {
+          await refreshEmployees(token);
+        }
+
+        if (!isActive) {
+          return;
+        }
+
+        setSession((currentSession) => ({
+          ...currentSession,
+          ...nextSession,
+        }));
+        setStoredSession(nextSession, isPersistentSession());
+      } catch {
+        if (!isActive) {
+          return;
+        }
+
+        clearStoredSession();
+        clearEmployees();
+        setSession({ role: null, data: null, token: null });
+      }
+    };
+
+    const intervalId = window.setInterval(syncSession, SESSION_REFRESH_INTERVAL_MS);
+
+    return () => {
+      isActive = false;
+      window.clearInterval(intervalId);
+    };
+  }, [clearEmployees, refreshEmployees, session.role, session.token]);
 
   const handleLogin = async (email, password, rememberMe) => {
     setIsSubmitting(true);
@@ -183,11 +245,11 @@ const App = () => {
                 isSubmitting={isSubmitting}
               />
               <div className="fixed bottom-8 left-0 right-0 text-center">
-                <p className="text-slate-400">
+                <p className="text-slate-600">
                   Don't have an account?{" "}
                   <button
                     onClick={() => setShowSignup(true)}
-                    className="text-blue-400 hover:text-blue-300 underline"
+                    className="text-amber-700 hover:text-amber-800 underline"
                   >
                     Create one
                   </button>
@@ -202,11 +264,11 @@ const App = () => {
                 isSubmitting={isSubmitting}
               />
               <div className="fixed bottom-8 left-0 right-0 text-center">
-                <p className="text-slate-400">
+                <p className="text-slate-600">
                   Already have an account?{" "}
                   <button
                     onClick={() => setShowSignup(false)}
-                    className="text-blue-400 hover:text-blue-300 underline"
+                    className="text-amber-700 hover:text-amber-800 underline"
                   >
                     Sign in
                   </button>

@@ -1,14 +1,14 @@
 const riskTone = {
-  low: "border-emerald-400/20 bg-emerald-400/10 text-emerald-100",
-  medium: "border-amber-400/20 bg-amber-400/10 text-amber-100",
-  high: "border-rose-400/20 bg-rose-400/10 text-rose-100",
+  low: "border-emerald-200 bg-emerald-50 text-emerald-700",
+  medium: "border-amber-200 bg-amber-50 text-amber-700",
+  high: "border-rose-200 bg-rose-50 text-rose-700",
 };
 
 const badgeTone = [
-  "bg-blue-400/14 text-blue-100 border-blue-300/20",
-  "bg-amber-300/14 text-amber-100 border-amber-300/20",
-  "bg-emerald-400/14 text-emerald-100 border-emerald-300/20",
-  "bg-fuchsia-400/14 text-fuchsia-100 border-fuchsia-300/20",
+  "bg-teal-50 text-teal-700 border-teal-200",
+  "bg-amber-50 text-amber-700 border-amber-200",
+  "bg-emerald-50 text-emerald-700 border-emerald-200",
+  "bg-slate-100 text-slate-700 border-slate-200",
 ];
 
 const EmployeeInsights = ({ data }) => {
@@ -26,14 +26,14 @@ const EmployeeInsights = ({ data }) => {
     <section className="panel-strong mt-8 rounded-[28px] p-6 sm:p-8">
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-sm uppercase tracking-[0.24em] text-blue-300/80">
+          <p className="text-sm uppercase tracking-[0.24em] text-amber-700/80">
             Career insights
           </p>
-          <h2 className="mt-2 text-2xl font-semibold text-white">
+          <h2 className="mt-2 text-2xl font-semibold text-slate-800">
             Growth score, workload risk, and badges
           </h2>
         </div>
-        <p className="max-w-2xl text-sm text-slate-400">
+        <p className="max-w-2xl text-sm text-slate-600">
           A fresher-friendly analytics layer that turns task history into interview-ready performance signals.
         </p>
       </div>
@@ -44,12 +44,12 @@ const EmployeeInsights = ({ data }) => {
             Employee growth score
           </p>
           <div className="mt-4 flex items-end gap-4">
-            <p className="text-6xl font-semibold text-white">{insights.growthScore}</p>
-            <p className="pb-2 text-sm text-slate-400">/100</p>
+            <p className="text-6xl font-semibold text-slate-800">{insights.growthScore}</p>
+            <p className="pb-2 text-sm text-slate-500">/100</p>
           </div>
-          <div className="mt-5 h-3 rounded-full bg-white/6">
+          <div className="mt-5 h-3 rounded-full bg-slate-100">
             <div
-              className="h-3 rounded-full bg-gradient-to-r from-sky-400 via-blue-400 to-indigo-400"
+              className="h-3 rounded-full bg-gradient-to-r from-teal-300 via-amber-300 to-emerald-400"
               style={{ width: `${insights.growthScore}%` }}
             />
           </div>
@@ -59,24 +59,24 @@ const EmployeeInsights = ({ data }) => {
             {insights.riskLabel}
           </div>
           <div className="mt-5 grid gap-3 sm:grid-cols-2">
-            <div className="rounded-[18px] border border-white/8 bg-white/4 p-4">
+            <div className="rounded-[18px] border border-slate-200 bg-white/70 p-4">
               <p className="text-xs uppercase tracking-[0.18em] text-slate-500">
                 Urgent open tasks
               </p>
-              <p className="mt-2 text-2xl font-semibold text-white">{insights.urgentOpenTasks}</p>
+              <p className="mt-2 text-2xl font-semibold text-slate-800">{insights.urgentOpenTasks}</p>
             </div>
-            <div className="rounded-[18px] border border-white/8 bg-white/4 p-4">
+            <div className="rounded-[18px] border border-slate-200 bg-white/70 p-4">
               <p className="text-xs uppercase tracking-[0.18em] text-slate-500">
                 Weighted workload
               </p>
-              <p className="mt-2 text-2xl font-semibold text-white">{insights.weightedLoad}</p>
+              <p className="mt-2 text-2xl font-semibold text-slate-800">{insights.weightedLoad}</p>
             </div>
           </div>
         </div>
 
         <div className="grid gap-4">
           <div className="panel rounded-[24px] p-5">
-            <p className="text-lg font-semibold text-white">Achievement badges</p>
+            <p className="text-lg font-semibold text-slate-800">Achievement badges</p>
             <div className="mt-4 flex flex-wrap gap-3">
               {insights.badges.length ? (
                 insights.badges.map((badge, index) => (
@@ -89,7 +89,7 @@ const EmployeeInsights = ({ data }) => {
                   </div>
                 ))
               ) : (
-                <div className="rounded-[18px] border border-dashed border-white/10 px-4 py-3 text-sm text-slate-400">
+                <div className="rounded-[18px] border border-dashed border-slate-200 px-4 py-3 text-sm text-slate-500">
                   Badges unlock as you complete more work on time with strong reviews.
                 </div>
               )}
@@ -99,29 +99,29 @@ const EmployeeInsights = ({ data }) => {
           <div className="grid gap-4 md:grid-cols-3">
             <div className="panel rounded-[24px] p-5">
               <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Reviewed tasks</p>
-              <p className="mt-2 text-3xl font-semibold text-white">{performance.reviewedCount}</p>
+              <p className="mt-2 text-3xl font-semibold text-slate-800">{performance.reviewedCount}</p>
             </div>
             <div className="panel rounded-[24px] p-5">
               <p className="text-xs uppercase tracking-[0.18em] text-slate-500">On-time rate</p>
-              <p className="mt-2 text-3xl font-semibold text-white">{performance.onTimeRate}%</p>
+              <p className="mt-2 text-3xl font-semibold text-slate-800">{performance.onTimeRate}%</p>
             </div>
             <div className="panel rounded-[24px] p-5">
               <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Avg rating</p>
-              <p className="mt-2 text-3xl font-semibold text-white">{performance.averageRating}/5</p>
+              <p className="mt-2 text-3xl font-semibold text-slate-800">{performance.averageRating}/5</p>
             </div>
           </div>
 
           <div className="panel rounded-[24px] p-5">
-            <p className="text-lg font-semibold text-white">Latest feedback</p>
+            <p className="text-lg font-semibold text-slate-800">Latest feedback</p>
             {latestReview ? (
-              <div className="mt-4 rounded-[20px] border border-white/8 bg-white/4 p-4">
-                <p className="text-sm font-semibold text-white">{latestReview.taskTitle}</p>
-                <p className="mt-2 text-sm text-slate-300">
+              <div className="mt-4 rounded-[20px] border border-slate-200 bg-white/70 p-4">
+                <p className="text-sm font-semibold text-slate-800">{latestReview.taskTitle}</p>
+                <p className="mt-2 text-sm text-slate-600">
                   {latestReview.review.feedback || "Reviewed without written feedback."}
                 </p>
               </div>
             ) : (
-              <div className="mt-4 rounded-[20px] border border-dashed border-white/10 px-4 py-5 text-sm text-slate-400">
+              <div className="mt-4 rounded-[20px] border border-dashed border-slate-200 px-4 py-5 text-sm text-slate-500">
                 Feedback will appear here once an admin reviews your completed work.
               </div>
             )}

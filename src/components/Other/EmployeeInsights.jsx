@@ -24,18 +24,15 @@ const EmployeeInsights = ({ data }) => {
 
   return (
     <section className="panel-strong mt-8 rounded-[28px] p-6 sm:p-8">
-      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <div className="mb-6">
         <div>
           <p className="text-sm uppercase tracking-[0.24em] text-amber-700/80">
-            Career insights
+            Insights
           </p>
           <h2 className="mt-2 text-2xl font-semibold text-slate-800">
-            Growth score, workload risk, and badges
+            Performance
           </h2>
         </div>
-        <p className="max-w-2xl text-sm text-slate-600">
-          A fresher-friendly analytics layer that turns task history into interview-ready performance signals.
-        </p>
       </div>
 
       <div className="grid gap-4 xl:grid-cols-[0.85fr_1.15fr]">
@@ -90,7 +87,7 @@ const EmployeeInsights = ({ data }) => {
                 ))
               ) : (
                 <div className="rounded-[18px] border border-dashed border-slate-200 px-4 py-3 text-sm text-slate-500">
-                  Badges unlock as you complete more work on time with strong reviews.
+                  No badges yet.
                 </div>
               )}
             </div>
@@ -117,12 +114,12 @@ const EmployeeInsights = ({ data }) => {
               <div className="mt-4 rounded-[20px] border border-slate-200 bg-white/70 p-4">
                 <p className="text-sm font-semibold text-slate-800">{latestReview.taskTitle}</p>
                 <p className="mt-2 text-sm text-slate-600">
-                  {latestReview.review.feedback || "Reviewed without written feedback."}
+                  {latestReview.review.feedback || "No feedback added."}
                 </p>
               </div>
             ) : (
               <div className="mt-4 rounded-[20px] border border-dashed border-slate-200 px-4 py-5 text-sm text-slate-500">
-                Feedback will appear here once an admin reviews your completed work.
+                No feedback yet.
               </div>
             )}
           </div>

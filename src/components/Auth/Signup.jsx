@@ -20,36 +20,6 @@ const Signup = ({ handleSignup, signupError, isSubmitting }) => {
 
   return (
     <div className="app-shell flex min-h-screen items-center justify-center">
-      <div className="grid w-full max-w-6xl gap-8 lg:grid-cols-[1.1fr_0.9fr]">
-        <section className="panel-strong hidden rounded-[32px] p-10 lg:flex lg:flex-col lg:justify-between">
-          <div className="max-w-xl">
-            <span className="status-pill border border-teal-200/70 bg-teal-50 text-teal-800">
-              Create your account
-            </span>
-            <h1 className="mt-6 text-5xl font-semibold leading-tight text-slate-800">
-              Join our workforce management platform.
-            </h1>
-            <p className="mt-5 max-w-lg text-base leading-7 text-slate-600">
-              Your role is automatically assigned based on your company code.
-              We will send your generated work email to your inbox, but your password stays private and is never emailed.
-            </p>
-          </div>
-          <div className="grid gap-4 sm:grid-cols-3">
-            <div className="panel rounded-3xl p-5">
-              <p className="text-sm text-slate-500">Auto assigned</p>
-              <p className="mt-3 text-2xl font-semibold text-slate-800">Role</p>
-            </div>
-            <div className="panel rounded-3xl p-5">
-              <p className="text-sm text-slate-500">Email sent to</p>
-              <p className="mt-3 text-2xl font-semibold text-slate-800">Inbox</p>
-            </div>
-            <div className="panel rounded-3xl p-5">
-              <p className="text-sm text-slate-500">Setup time</p>
-              <p className="mt-3 text-2xl font-semibold text-slate-800">Instant</p>
-            </div>
-          </div>
-        </section>
-
         <div className="panel-strong mx-auto flex w-full max-w-md items-center justify-center rounded-[32px] p-4 sm:p-6">
           <form
             onSubmit={submitHandler}
@@ -60,9 +30,6 @@ const Signup = ({ handleSignup, signupError, isSubmitting }) => {
                 Employee Management System
               </p>
               <h2 className="mt-3 text-3xl font-semibold text-slate-800">Create Account</h2>
-              <p className="mt-2 text-sm leading-6 text-slate-600">
-                Register with your company code. Your role will be auto-assigned.
-              </p>
             </div>
 
             {signupError ? (
@@ -85,9 +52,6 @@ const Signup = ({ handleSignup, signupError, isSubmitting }) => {
                   type="text"
                   placeholder="Enter your full name"
                 />
-                <p className="mt-2 text-xs text-slate-500">
-                  Your work email will be: <span className="font-mono text-teal-700">{firstName.toLowerCase()}@[role].com</span>
-                </p>
               </div>
 
               <div>
@@ -103,9 +67,6 @@ const Signup = ({ handleSignup, signupError, isSubmitting }) => {
                   type="email"
                   placeholder="your.email@example.com"
                 />
-                <p className="mt-2 text-xs text-slate-500">
-                  We will send your generated work email here.
-                </p>
               </div>
 
               <div>
@@ -122,9 +83,6 @@ const Signup = ({ handleSignup, signupError, isSubmitting }) => {
                   placeholder="Enter 4-digit code"
                   maxLength="4"
                 />
-                <p className="mt-2 text-xs text-slate-500">
-                  Your code determines your role (Admin or Employee).
-                </p>
               </div>
 
               <div>
@@ -140,9 +98,6 @@ const Signup = ({ handleSignup, signupError, isSubmitting }) => {
                   type="password"
                   placeholder="Use at least 8 characters"
                 />
-                <p className="mt-2 text-xs text-slate-500">
-                  This password is stored securely and will not be sent by email.
-                </p>
               </div>
             </div>
 
@@ -153,13 +108,8 @@ const Signup = ({ handleSignup, signupError, isSubmitting }) => {
             >
               {isSubmitting ? "Creating Account..." : "Create Account"}
             </button>
-
-            <p className="mt-5 text-center text-xs leading-5 text-slate-500">
-              Your work email will be auto-generated and emailed to you after signup.
-            </p>
           </form>
         </div>
-      </div>
     </div>
   );
 };

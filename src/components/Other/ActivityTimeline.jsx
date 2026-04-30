@@ -11,7 +11,7 @@ const formatActivityTime = (value) => {
 
 const ActivityTimeline = ({
   title = "Recent activity",
-  subtitle = "Track the latest work updates across the system.",
+  subtitle = "",
   items = [],
 }) => {
   return (
@@ -23,7 +23,7 @@ const ActivityTimeline = ({
           </p>
           <h2 className="mt-2 text-2xl font-semibold text-slate-800">{title}</h2>
         </div>
-        <p className="max-w-xl text-sm text-slate-600">{subtitle}</p>
+        {subtitle ? <p className="max-w-xl text-sm text-slate-600">{subtitle}</p> : null}
       </div>
 
       <div className="space-y-4">
@@ -50,7 +50,7 @@ const ActivityTimeline = ({
           ))
         ) : (
           <div className="rounded-[22px] border border-dashed border-slate-200 px-5 py-6 text-sm text-slate-500">
-            Activity events will appear here once tasks are created, updated, and reviewed.
+            No activity yet.
           </div>
         )}
       </div>

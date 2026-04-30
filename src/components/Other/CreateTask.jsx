@@ -126,15 +126,11 @@ const CreateTask = ({ onTaskCreated }) => {
     <div className="panel-strong mt-8 rounded-[28px] p-6 sm:p-8">
       <div className="mb-8">
         <p className="text-sm uppercase tracking-[0.24em] text-amber-700/80">
-          Admin workspace
+          Tasks
         </p>
         <h2 className="mt-3 text-2xl font-semibold text-slate-800 sm:text-3xl">
-          Create a new task
+          Create task
         </h2>
-        <p className="mt-2 text-sm leading-6 text-slate-600">
-          Assign work with a cleaner input flow while keeping the same employee
-          data structure and task behavior.
-        </p>
       </div>
 
       {errorMessage ? (
@@ -222,7 +218,7 @@ const CreateTask = ({ onTaskCreated }) => {
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <p className="text-xs uppercase tracking-[0.18em] text-amber-700/80">
-                  Smart priority suggestion
+                  Suggested priority
                 </p>
                 <p className="mt-2 text-lg font-semibold text-slate-800">
                   Recommended: {recommendation.priority}

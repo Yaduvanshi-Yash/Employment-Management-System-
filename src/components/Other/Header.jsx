@@ -11,15 +11,11 @@ const Header = (props) => {
       <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
         <div className="relative z-10">
           <p className="text-sm uppercase tracking-[0.28em] text-blue-700/75">
-            Dashboard overview
+            Workspace
           </p>
           <h1 className="mt-3 text-3xl font-semibold text-slate-800 sm:text-4xl">
-            Hello, {props.data ? props.data.firstName : "Admin"}
+            Welcome back, {props.data ? props.data.firstName : "Admin"}
           </h1>
-          <p className="mt-2 max-w-xl text-sm leading-6 text-slate-600 sm:text-base">
-            {props.description ||
-              "Stay on top of assignments, progress, and delivery without changing your existing workflow."}
-          </p>
         </div>
         <div className="relative z-10 flex flex-col gap-3 sm:flex-row sm:items-center">
           {props.sections?.length ? (
@@ -70,20 +66,14 @@ const Header = (props) => {
       ) : null}
 
       {props.activeSectionMeta ? (
-        <div className="relative z-10 mt-6 grid gap-4 rounded-[22px] border border-blue-100 bg-white/82 px-5 py-4 lg:grid-cols-[1fr_auto] lg:items-center">
+        <div className="relative z-10 mt-6 rounded-[22px] border border-blue-100 bg-white/82 px-5 py-4">
           <div>
             <p className="text-xs uppercase tracking-[0.18em] text-blue-700/70">
-            Current section
+              Current section
             </p>
             <p className="mt-2 text-lg font-semibold text-slate-800">
               {props.activeSectionMeta.label}
             </p>
-            <p className="mt-1 text-sm text-slate-600">
-              {props.activeSectionMeta.description}
-            </p>
-          </div>
-          <div className="rounded-[18px] border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
-            Organized, color-coded, and easier to scan.
           </div>
         </div>
       ) : null}

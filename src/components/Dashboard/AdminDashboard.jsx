@@ -89,7 +89,6 @@ const AdminDashboard = (props) => {
           activeSection={activeSection}
           onSectionChange={setActiveSection}
           activeSectionMeta={activeSectionMeta}
-          description="Move through analytics, planning, reviews, and activity from a cleaner admin workspace."
         />
 
         {activeSection === "overview" ? (
@@ -109,8 +108,7 @@ const AdminDashboard = (props) => {
 
         {activeSection === "activity" ? (
           <ActivityTimeline
-            title="Team activity timeline"
-            subtitle="A running feed of assignments, status changes, and completed reviews."
+            title="Recent activity"
             items={analytics?.recentActivity || []}
           />
         ) : null}

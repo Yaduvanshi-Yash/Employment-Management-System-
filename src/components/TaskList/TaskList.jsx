@@ -96,15 +96,12 @@ const TaskList = ({ data, onEmployeeUpdate }) => {
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-sm uppercase tracking-[0.24em] text-amber-700/80">
-            Assigned work
+            Tasks
           </p>
           <h2 className="mt-2 text-2xl font-semibold text-slate-800">
             Task board
           </h2>
         </div>
-        <p className="text-sm text-slate-600">
-          Review the queue and update progress directly from each card.
-        </p>
       </div>
       {errorMessage ? (
         <p className="mb-5 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
@@ -169,7 +166,7 @@ const TaskList = ({ data, onEmployeeUpdate }) => {
         })}
         {!data.tasks.length && (
           <div className="panel flex min-h-72 w-full items-center justify-center rounded-[24px] text-slate-400">
-            No tasks assigned yet.
+            No tasks.
           </div>
         )}
       </div>

@@ -228,7 +228,7 @@ const App = () => {
   if (isBootstrapping) {
     return (
       <div className="app-shell flex min-h-screen items-center justify-center text-slate-300">
-        Restoring your secure session...
+        Loading...
       </div>
     );
   }

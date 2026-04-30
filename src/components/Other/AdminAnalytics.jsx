@@ -18,13 +18,10 @@ const riskTone = {
   high: "bg-rose-50 text-rose-700 border-rose-200",
 };
 
-const MetricCard = ({ label, value, helper }) => (
+const MetricCard = ({ label, value }) => (
   <div className="panel rounded-[24px] p-5">
     <p className="text-sm uppercase tracking-[0.2em] text-slate-500">{label}</p>
-    <div className="mt-6 flex items-end justify-between gap-3">
-      <p className="text-4xl font-semibold text-slate-800">{value}</p>
-      <p className="text-sm text-slate-500">{helper}</p>
-    </div>
+    <p className="mt-6 text-4xl font-semibold text-slate-800">{value}</p>
   </div>
 );
 
@@ -93,9 +90,6 @@ const DonutChart = ({ items }) => {
       <div className="flex items-center justify-between gap-5">
         <div>
           <p className="text-lg font-semibold text-slate-800">Task health chart</p>
-          <p className="mt-2 text-sm text-slate-600">
-            Visual split of current team workload.
-          </p>
         </div>
         <div className="relative h-36 w-36 shrink-0">
           <svg viewBox="0 0 100 100" className="h-full w-full -rotate-90">
@@ -139,9 +133,6 @@ const ProductivityTrend = ({ trend = [] }) => {
     <div className="panel rounded-[24px] p-5">
       <div className="mb-5">
         <p className="text-lg font-semibold text-slate-800">7-day productivity</p>
-        <p className="mt-2 text-sm text-slate-600">
-          Completed task trend for quick reporting.
-        </p>
       </div>
       <div className="flex h-44 items-end gap-3">
         {trend.length ? (
@@ -161,7 +152,7 @@ const ProductivityTrend = ({ trend = [] }) => {
           ))
         ) : (
           <div className="flex h-full w-full items-center justify-center rounded-[20px] border border-dashed border-slate-200 text-sm text-slate-500">
-            Complete tasks to build a productivity chart.
+            No completed tasks yet.
           </div>
         )}
       </div>
@@ -173,7 +164,7 @@ const AdminAnalytics = ({ analytics, isLoading }) => {
   if (isLoading) {
     return (
       <section className="panel-strong mt-8 rounded-[28px] p-6 sm:p-8">
-        <div className="text-sm text-slate-500">Loading admin analytics...</div>
+        <div className="text-sm text-slate-500">Loading...</div>
       </section>
     );
   }
@@ -209,7 +200,7 @@ const AdminAnalytics = ({ analytics, isLoading }) => {
 
   return (
     <section className="panel-strong mt-8 rounded-[28px] p-6 sm:p-8">
-      <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <div className="mb-8">
         <div>
           <p className="text-sm uppercase tracking-[0.24em] text-amber-700/80">
             Analytics overview
@@ -218,31 +209,24 @@ const AdminAnalytics = ({ analytics, isLoading }) => {
             Workforce insights
           </h2>
         </div>
-        <p className="max-w-2xl text-sm text-slate-600">
-          Track team throughput, completion quality, overdue risk, growth score, and badge-driven performance at a glance.
-        </p>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <MetricCard
           label="Completed Tasks"
           value={performance.completedCount}
-          helper="Reviewed output"
         />
         <MetricCard
           label="On-Time Rate"
           value={`${performance.onTimeRate}%`}
-          helper="Deadline discipline"
         />
         <MetricCard
           label="Average Rating"
           value={`${performance.averageRating || "0.0"}/5`}
-          helper="Quality score"
         />
         <MetricCard
           label="High Risk Team"
           value={highRiskEmployees.length}
-          helper="Burnout watch"
         />
       </div>
 
@@ -307,7 +291,7 @@ const AdminAnalytics = ({ analytics, isLoading }) => {
             </div>
           ) : (
             <div className="mt-6 rounded-[20px] border border-dashed border-slate-200 px-5 py-6 text-sm text-slate-500">
-              Top performer insights will appear after tasks are completed and reviewed.
+              No completed reviews yet.
             </div>
           )}
 
@@ -358,10 +342,7 @@ const AdminAnalytics = ({ analytics, isLoading }) => {
       <div className="mt-6 grid gap-4 xl:grid-cols-[1.1fr_0.9fr]">
         <ProductivityTrend trend={analytics?.completionTrend || []} />
         <div className="panel rounded-[24px] p-5">
-          <p className="text-lg font-semibold text-slate-800">Operational highlights</p>
-          <p className="mt-2 text-sm leading-6 text-slate-600">
-            This dashboard surfaces delivery quality, workload pressure, employee momentum, and planning visibility in one lighter workspace.
-          </p>
+          <p className="text-lg font-semibold text-slate-800">Summary</p>
           <div className="mt-5 grid gap-3 sm:grid-cols-2">
             <div className="rounded-[18px] border border-slate-200 bg-white/70 p-4">
               <p className="text-xs uppercase tracking-[0.18em] text-slate-500">

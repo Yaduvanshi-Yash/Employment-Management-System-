@@ -61,7 +61,6 @@ const EmployeeDashboard = (props) => {
           activeSection={activeSection}
           onSectionChange={setActiveSection}
           activeSectionMeta={activeSectionMeta}
-          description="Move between your summary, task board, and activity feed without scrolling through one long page."
         />
 
         {activeSection === "overview" ? (
@@ -80,8 +79,7 @@ const EmployeeDashboard = (props) => {
 
         {activeSection === "activity" ? (
           <ActivityTimeline
-            title="Your recent activity"
-            subtitle="See the latest progress updates, completions, and review moments tied to your tasks."
+            title="Recent activity"
             items={recentActivity}
           />
         ) : null}

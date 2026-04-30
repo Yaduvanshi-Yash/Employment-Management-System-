@@ -162,10 +162,10 @@ const AllTask = ({ onTaskReviewed }) => {
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-sm uppercase tracking-[0.24em] text-amber-700/80">
-            Task explorer
+            Tasks
           </p>
           <h2 className="mt-2 text-2xl font-semibold text-slate-800">
-            Search, filter, export, and review tasks
+            Review tasks
           </h2>
         </div>
         <button
@@ -235,7 +235,7 @@ const AllTask = ({ onTaskReviewed }) => {
       <div className="mt-6 space-y-4">
         {isEmployeesLoading ? (
           <div className="rounded-[22px] border border-slate-200 px-5 py-6 text-sm text-slate-500">
-            Loading task explorer...
+            Loading...
           </div>
         ) : null}
 
@@ -292,12 +292,12 @@ const AllTask = ({ onTaskReviewed }) => {
                         {renderRatingLabel(task.review.rating)}
                       </p>
                       <p className="mt-2 text-sm text-slate-600">
-                        {task.review.feedback || "No written feedback added."}
+                        {task.review.feedback || "No feedback added."}
                       </p>
                     </div>
                   ) : (
                     <p className="mt-3 text-sm text-slate-400">
-                      No review submitted yet.
+                      Not reviewed
                     </p>
                   )}
 
@@ -360,7 +360,7 @@ const AllTask = ({ onTaskReviewed }) => {
                     </div>
                   ) : (
                     <div className="mt-4 rounded-[16px] border border-dashed border-slate-200 px-4 py-3 text-sm text-slate-500">
-                      Review becomes available after the task is completed.
+                      Available after completion.
                     </div>
                   )}
                 </div>
@@ -371,7 +371,7 @@ const AllTask = ({ onTaskReviewed }) => {
 
         {!isEmployeesLoading && !filteredTasks.length ? (
           <div className="rounded-[22px] border border-dashed border-slate-200 px-5 py-6 text-sm text-slate-500">
-            No tasks matched the current filters.
+            No tasks found.
           </div>
         ) : null}
       </div>

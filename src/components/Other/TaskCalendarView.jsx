@@ -72,10 +72,10 @@ const TaskCalendarView = ({ tasks = [] }) => {
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-sm uppercase tracking-[0.24em] text-amber-700/80">
-            Calendar view
+            Calendar
           </p>
           <h2 className="mt-2 text-2xl font-semibold text-slate-800">
-            Task calendar and delivery planning
+            Task schedule
           </h2>
         </div>
         <div className="flex items-center gap-3">
@@ -151,7 +151,7 @@ const TaskCalendarView = ({ tasks = [] }) => {
         </div>
 
         <div className="panel rounded-[24px] p-5">
-          <p className="text-lg font-semibold text-slate-800">Upcoming month highlights</p>
+          <p className="text-lg font-semibold text-slate-800">Upcoming</p>
           <div className="mt-4 space-y-3">
             {upcomingTasks.length ? (
               upcomingTasks.map((task) => (
@@ -179,7 +179,7 @@ const TaskCalendarView = ({ tasks = [] }) => {
               ))
             ) : (
               <div className="rounded-[18px] border border-dashed border-slate-200 px-4 py-5 text-sm text-slate-500">
-                No tasks are scheduled for this month yet.
+                No tasks this month.
               </div>
             )}
           </div>
